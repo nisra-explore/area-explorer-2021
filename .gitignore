@@ -5,5 +5,6 @@ docs
 /package
 /build
 /data_jsons
+/data_jsons_dz
 data_jsons.zip
 *.zip

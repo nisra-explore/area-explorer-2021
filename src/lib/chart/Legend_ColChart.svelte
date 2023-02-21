@@ -1,18 +1,15 @@
 <script>
-	import { changeClass, changeStrLegend } from "../utils";
+	import { changeStrLegend } from "../utils";
 
 	export let data;
 	export let xKey = "x";
 	export let yKey = "y";
 	export let zKey = "ni";
-	export let topic_prev_available = true;
 	export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#801650', '#fbb15f', '#F66068',  'lightgrey'];
-//	export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#F66068', '#801650', '#0D9AA2', 'lightgrey'];
-//	export let textColor = '#555';
-//	export let mutedColor = '#999';
+	export let textColor = '#555';
+	export let mutedColor = '#999';
 	export let decimals = null;
-//	export let round = false;
-
+	export let round = false;
 	
 	$: sum = data.map(d => d[yKey]).reduce((a, b) => a + b, 0);
 	$: psum = data.map(d => d[zKey]).reduce((a, b) => a + b, 0);
@@ -21,8 +18,6 @@
 		let str;
 		if (decimals) {
 			str = ((val / sum) * 100).toFixed(decimals) + '%';
-//		} else if ((val / sum) * 100 < 0.1) {
-//			str = '<0.1%';
 		} else if ((val / sum) * 100 < 1) {
 			str = '<1%';
 		} else {
@@ -33,23 +28,18 @@
 </script>
 
 
-
-
 <table class="legend">
 	<tbody>
 		{#each data as item, i}
 		<tr>
 			<td>
 				<svg width="20" height="30" class="bullet">
-					<rect  width="20" height="30" style="fill:{colors[i]};"></rect>
 				</svg> {item[xKey]} 
 			</td>
 			<td class="cell-right" style="vertical-align:top">
 				{toPerc(item[yKey])}
-				{#if zKey == "prev" && topic_prev_available}
+				{#if zKey == "prev"}
 					<span class="" style="color: #1460aa">(2011 {changeStrLegend(Math.round(item[zKey]), '%)')}</span>
-				{:else if  zKey == "prev" && !topic_prev_available}
-					<span class="" style="color: #1460aa"></span>
 				{:else if zKey}
 					<span class="" style="color: #1460aa">(NI {toPerc(item[zKey])})</span>
 				{/if}
@@ -61,7 +51,7 @@
 </table>
 
 <style>
-/* 	ul {
+	ul {
 		margin: 0;
 		padding: 0;
 		font-size: 0.85em;
@@ -70,14 +60,14 @@
 	li {
 		display: inline-block;
 		margin-right: 10px;
-	} */
+	}
 	.bullet {
   	height: 15px;
   	width: 15px;
 		display: inline-block;
 		transform: translate(0, 2px);
 	}
-/* 	.round {
+	.round {
 		border-radius: 50%;
 		transform: scale(0.9);
 		transform: translate(0, 3px);
@@ -99,7 +89,7 @@
 	.nochange {
 		color: grey;
 		text-transform: none;
-	} */
+	}
 	table.legend {
 		width: 100%;
 		border-spacing: 0;
@@ -115,10 +105,42 @@
 		text-align: right;
 		width: 100px;
 	}
-/* 	.legend-vis {
+	.legend-vis {
 		display: inline-block;
 		width: 0.85rem;
 		height: 0.85rem;
 		transform: translate(0,3px);
-	} */
+	}
+
+	.chart {
+		width: 100%;
+		position: relative;
+	}
+  .chart + .chart {
+    border-top: 3px solid white;
+  }
+	.legend {
+		width: 100%;
+		margin-top: 3px;
+	}
+	.label {
+		position: absolute;
+		box-sizing: border-box;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		padding: 0px 2px;
+		font-size: 1em;
+		color: white;
+		opacity: 1;
+		font-weight: bold;
+		line-height: 1.2;
+	}
+	.label:hover {
+		opacity: 1;
+		background-color: rgba(0,0,0,0.3);
+	}
+
 </style>

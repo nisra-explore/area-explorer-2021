@@ -3,7 +3,7 @@
 	
 	const dispatch = createEventDispatcher();
 	
-	export let options;
+	export let search_data;
 	export let selected = null;
 	export let placeholder = "Enter a town or area name";
 	export let value = "code";
@@ -12,7 +12,7 @@
 	export let search = false;
 	
 	let selectedPrev = selected;
-	let selectedItem = selected ? options.find(d => { d[value] == selected[value] }) : null;
+	let selectedItem = selected ? search_data.find(d => { d[value] == selected[value] }) : null;
 	let expanded = false;
 	let filter = '';
 	let active = null;
@@ -27,7 +27,7 @@
 	
 	$: regex = filter ? new RegExp(filter, 'i') : null;
 	$: {
-		filtered = regex ? options.filter(option => regex.test(option[label])) : options;
+		filtered = regex ? search_data.filter(option => regex.test(option[label])) : search_data;
 		active = 0;
 	}
 	
@@ -90,7 +90,7 @@
 	};
 	
 	$: if (selectedPrev != selected) {
-		selectedItem = options.find(d => d[value] == selected[value]);
+		selectedItem = search_data.find(d => d[value] == selected[value]);
 		selectedPrev = selected;
 	}
 </script>

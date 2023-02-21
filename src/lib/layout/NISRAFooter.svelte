@@ -1,10 +1,10 @@
 <script>
-  import { assets } from "$app/paths";
+ // import { assets } from "$app/paths";
 	import { getContext } from 'svelte';
 	import Section from "$lib/layout/Section.svelte";
 
 
-	export let theme = getContext('theme');
+//	export let theme = getContext('theme');
 </script>
 
 <!-- svelte-ignore missing-declaration -->
@@ -74,7 +74,6 @@
 			<ul>
 				<li>&copy Crown Copyright</li>
 				<li><a href="https://www.nisra.gov.uk/contact" class="link" style="color: #ffffff">Contact us</a></li>
-				<!-- <li><a href="https://www.nisra.gov.uk/nisra-privacy-notice" class="link" style="color: #ffffff">Cookies and privacy</a></li> -->
 				<li><a href="https://www.nisra.gov.uk/terms-and-conditions" class="link" style="color: #ffffff">Terms and conditions</a></li>
 				<li><a href="https://www.nisra.gov.uk/cookies" class="link" style="color: #ffffff">Cookies</a></li>
 				<li><a href="https://www.nisra.gov.uk/nisra-privacy-notice" class="link" style="color: #ffffff">Privacy</a></li>
@@ -106,13 +105,7 @@
 		color: #222;
 		text-decoration: none;
 	}
-	footer hr {
-		margin-bottom: 10px;
-		margin-top: 10px;
-		border: none;
-		border-top: 1px solid #777;
-	}
-	ul {
+ 	ul {
 		padding: 0;
 		margin: 0;
 	}
@@ -120,22 +113,22 @@
 		margin-right: 18px;
 		display: inline-block;
 	}
-	.logo-img {
+/* 	.logo-img {
 		margin-bottom: 2px;
 		width: 120px;
-	}
-	.ogl-img {
+	} */
+/* 	.ogl-img {
 		margin: 0 0.5rem 0.2rem 0;
 		width: 59px;
 		height: 24px;
 		vertical-align: middle;
-	}
-	.license {
+	} */
+/* 	.license {
 		vertical-align: top;
-	}
-	a img:hover {
+	} */
+/* 	a img:hover {
 		cursor: pointer;
-	}
+	} */
 	.column {
   		float: left;
   		padding: 40px;

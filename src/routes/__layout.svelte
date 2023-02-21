@@ -1,7 +1,7 @@
 <script>
 	import { setContext } from "svelte";
   import "../app.css";
-	import { themes, urls } from "$lib/config";
+	import { themes } from "$lib/config";
 	import Warning from "$lib/ui/Warning.svelte";
 	import NISRAHeader from "$lib/layout/NISRAHeader.svelte";
 	import NISRAFooter from "$lib/layout/NISRAFooter.svelte";
@@ -24,8 +24,6 @@
 </script>
 
 <svelte:head>
-<!-- Census favicon -->
-<!-- <link rel="icon" href="https://cdn.ons.gov.uk/sdc/design-system/32.2.2-census/favicons/census/en/favicon.ico" /> -->
 <link rel="icon" href="https://www.nisra.gov.uk/sites/nisra.gov.uk/themes/nisra_theme/favicon.ico" /> 
 
 </svelte:head>

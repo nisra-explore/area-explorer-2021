@@ -2,7 +2,7 @@
 	export let data;
 	export let xKey = "perc";
 	export let yKey = "category";
-	export let zKey = "ew";
+	export let zKey = "ni";
 	export let formatTick = (d) => Math.round(d);
 	export let suffix = "%";
 	export let barHeight = 20;
@@ -39,7 +39,21 @@
 	$: xScale = (value) => (value / xDomain[1]) * 100;
 
 	$: data_grouped = groupData(data, yKey);
+
+
+	function toPerc(val) {
+		let str;
+		if (val < 1) {
+			str = '<1%';
+		} else {
+			str = val.toFixed(0) + '%';
+		}
+		return str;
+	}
+	
 </script>
+
+
 
 {#if zDomain[1]}
 	<ul class="legend-block">
@@ -76,7 +90,9 @@
 				style:height="50%"
 				bind:clientWidth={d.width}
 			>
-				{formatTick(d[xKey])}{suffix}
+				<!-- {formatTick(d[xKey])}{suffix}
+				{d[xKey]} -->
+				{toPerc(d[xKey])}
 			</div>
 		{/each}
 	</div>

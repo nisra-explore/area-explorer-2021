@@ -50,6 +50,7 @@
 				style: style,
 				minZoom: minzoom,
 				maxZoom: maxzoom,
+				maxBounds:  [[-9.20, 53.58],[-4.53, 55.72]],
 				interactive: interactive,
 				...options,
 			});

@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	export let xKey = "x";
+	//export let xKey = "x";
 	export let yKey = "y";
 	export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#801650', '#fbb15f', '#F66068',  'lightgrey'];
 //	export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#F66068', '#801650', '#0D9AA2', 'lightgrey'];
@@ -28,7 +28,7 @@
 {/if}
 
 <style>
-	.stack {
+ 	.stack {
     position: relative;
 		width: 100%;
 		height: 100%;
@@ -37,5 +37,5 @@
 		position: absolute;
     height: 100%;
     top: 0;
-	}
+	} 
 </style>

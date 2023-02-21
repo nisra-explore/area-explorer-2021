@@ -4,7 +4,7 @@
 <script>
   import { base } from "$app/paths";
   import { assets } from "$app/paths";
-  import { urls } from "$lib/config";
+  import { app_inputs } from "$lib/config";
   import Section from "$lib/layout/Section.svelte";
 </script>
 
@@ -13,15 +13,15 @@
   <meta name="description" content="">
   <meta property="og:title" content="Census Area Explorer" />
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="{urls.base}/" />
+	<meta property="og:url" content="{app_inputs.base}/" />
 	<meta property="og:description" content="Explore census data for places in Northern Ireland." />
 	<meta name="description" content="Explore census data for places in Northern Ireland." />
 </svelte:head>
 
 <Section column="wide">
   <div class="block">
-    <span class="text-big title">Area Explorer</span>
-    <p>Select Northern Ireland or a Local Government District to start exploring Census 2021 data</p>
+    <span class="text-big title">Census 2021 - Area Explorer</span>
+    <p>Select an area below to start exploring Census 2021 data.</p>
     <ul>
       <li><a href="{base}/N92000002"><strong>Northern Ireland</strong></a></li>
       <ul>
@@ -42,7 +42,7 @@
 
 
   </div>
-  <div>This application contains data for Northern Ireland and the 11 Local Government Districts.  
+  <div>This application contains data for Northern Ireland, the 11 Local Government Districts and the areas within.  
     It will be updated with more topics and lower geographies as they are released.  
   </div>
 </Section>

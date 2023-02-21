@@ -1,29 +1,36 @@
 <script>
 	import { LayerCake, Svg, Html } from 'layercake';
 	import { scaleBand } from 'd3-scale';
+
 	import Col from './Col.svelte';
 	import AxisX from './AxisX.svelte';
 	
 	export let data;
 	export let suffix = '%';
-	export let decimals = 0;
+	export let decimals = null;
 	export let fill = '#00205B';
 	
-	export let xKey = 'x';
+	export let xKey = "x";
 	export let yKey = 'y';
 	export let zKey= null;
 	
+	export let colors = ['#00205B','#00205B', '#00205B',   '#00205B'];
+
 	$: xDomain = data.map(d => d[xKey]);
 	$: yDomain = [0, Math.max(...data.map(d => d[yKey]))];
 	$: formatVal = d => d.toFixed(decimals) + suffix;
+
+
+
 </script>
 
 <style>
 	.chart-container {
 		width: 100%;
 		height: 100%;
-		position: absolute;
 	}
+
+	
 </style>
 
 <div class="chart-container">
@@ -47,3 +54,5 @@
 
 	</LayerCake>
 </div>
+
+

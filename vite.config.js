@@ -6,7 +6,7 @@ const config = {
 
         server: {
                     fs: {
-                        allow: ['data_jsons']
+                        allow: ['data_jsons', 'data_jsons_dz']
                     }
                 }
 };

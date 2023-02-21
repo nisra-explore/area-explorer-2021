@@ -1,6 +1,6 @@
 <nav class="warning">
   <div class="col-wide middle">
-    <strong>This prototype application will be enhanced as further census data is released.  
+    <strong>This prototype application will be enhanced as further census data is released.
       </strong>
     </div>
 </nav>
