@@ -199,14 +199,14 @@ export const mapSources = {
 		id: 'lgd',
 		promoteId: 'lgd_code',
 		type: 'vector',
-		url: 'https://raw.githubusercontent.com/NISRA-Tech-Lab/map_tiles/main/lgd2014/{z}/{x}/{y}.pbf',
+		url: 'https://raw.githubusercontent.com/nisra-explore/map_tiles/main/lgd2014/{z}/{x}/{y}.pbf',
 		maxzoom: 12
 	},
 	dea: {
 		id: 'dea',
 		promoteId: 'dea_code',
 		type: 'vector',
-		url: 'https://raw.githubusercontent.com/NISRA-Tech-Lab/map_tiles/main/dea_2014/{z}/{x}/{y}.pbf',
+		url: 'https://raw.githubusercontent.com/nisra-explore/map_tiles/main/dea_2014/{z}/{x}/{y}.pbf',
 		minzoom: 6,
 		maxzoom: 12
 	},
@@ -214,7 +214,7 @@ export const mapSources = {
 		id: 'sdz',
 		promoteId: 'sdz_code',
 		type: 'vector',
-		url: 'https://raw.githubusercontent.com/NISRA-Tech-Lab/map_tiles/main/sdz_2021/{z}/{x}/{y}.pbf',
+		url: 'https://raw.githubusercontent.com/nisra-explore/map_tiles/main/sdz_2021/{z}/{x}/{y}.pbf',
 //		url: '/data/map_tiles/soa21/{z}/{x}/{y}.pbf',
 		minzoom: 6,
 		maxzoom: 12
@@ -223,7 +223,7 @@ export const mapSources = {
 		id: 'dz',
 		promoteId: 'dz_code',
 		type: 'vector',
-		url: 'https://raw.githubusercontent.com/NISRA-Tech-Lab/map_tiles/main/dz_2021/{z}/{x}/{y}.pbf',
+		url: 'https://raw.githubusercontent.com/nisra-explore/map_tiles/main/dz_2021/{z}/{x}/{y}.pbf',
 //		url: '/data/map_tiles/sa/{z}/{x}/{y}.pbf',
  		minzoom: 6,
 		maxzoom: 12, 
@@ -232,7 +232,7 @@ export const mapSources = {
 		id: 'ward',
 		promoteId: 'ward_Code',
 		type: 'vector',
-		url: 'https://raw.githubusercontent.com/NISRA-Tech-Lab/map_tiles/main/ward2014/{z}/{x}/{y}.pbf',
+		url: 'https://raw.githubusercontent.com/nisra-explore/map_tiles/main/ward2014/{z}/{x}/{y}.pbf',
 		minzoom: 6,
 		maxzoom: 12
 	} 
