@@ -1389,7 +1389,7 @@
 					<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
 				{/if} -->
 					</div>
-						<div class="div-grey-box">
+						 <div class="div-grey-box">
 							<div
 								class="row"
 								style="display: flex; cursor: pointer;"
@@ -1418,7 +1418,7 @@
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
-<!-- 							<br>
+						<!--	<br>
 							{#if comp_none || (comp_ni && place.type == "ni")}
 								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
@@ -1426,7 +1426,7 @@
 							{:else if comp_ni && place.type != "ni"}
 								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
 							{/if} -->
-									</div>
+						</div>
 					</div>
   
 				  </div>
@@ -1500,7 +1500,7 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 0.85em; margin: 0; width: 100%"
+											style="font-size: 0.87em; margin: 0; width: 100%"
 										>
 											Long-term health problem or disability<span
 												style="color: gray; font-size: 14pt;"
@@ -1897,14 +1897,769 @@
  
 				  </div>
 				</div>
-			  </div>
+				</div>
+				<!-- START ACCORDION 7-->
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="panelsStayOpen-headingSeven">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
+						<span class="accordion-button-title">Household Structure</span>
+					  </button>
+					</h2>
+					<div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
+					  <div class="accordion-body">
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Number of dependent children, Household composition</span>
+	  
 
+						<div class="grid mt" bind:clientWidth={w}>
+	                     <!-- START CHART 1 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#dep-child-info"
+									aria-expanded="false"
+									aria-controls="dep-child-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Number of dependent children<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="dep-child-info">
+									<div class="card card-body">
+										Count of households by number of dependent children. A dependent child is a person aged 0 to 15 in a household (whether or not in a family) or aged 16 to 18 in full-time education and living in a family with his or her parent(s) or grandparent(s). 'No dependent children' includes households with no children and households where all children are non-dependent. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["number_of_dependent_children_households"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 1 -->
+							<!-- START CHART 2 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#hh-comp-info"
+									aria-expanded="false"
+									aria-controls="hh-comp-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Household composition<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="hh-comp-info">
+									<div class="card card-body">
+										Household composition classifies households according to the relationships between the household members. Pension age was 66 at the time of Census 2021 and 65 at the time of Census 2011. 
+										'Other household types' includes: Single family household: Other family composition; and Other household types: One dependent child/Two or more dependent children/All in full-time education/All aged 66 and over/Other family composition. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["household_composition_households"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 2 -->
+							<!-- START CHART 3 -->
+							<div class="div-white-box">
+							
+							</div>
+	                        <!-- END CHART 3 -->
+								
+					</div>	
+				 </div>
+			 </div>
+		     </div>
+             <!-- END ACCORDIAN	7 -->
+			 <!-- START ACCORDION 8-->
+			 <div class="accordion-item">
+				<h2 class="accordion-header" id="panelsStayOpen-headingEight">
+				  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEight" aria-expanded="false" aria-controls="panelsStayOpen-collapseEight">
+					<span class="accordion-button-title">Marital & Civil Partnership Status</span>
+				  </button>
+				</h2>
+				<div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
+				  <div class="accordion-body">
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Marital and civil partnership status</span>
+  
 
+					<div class="grid mt" bind:clientWidth={w}>
+					 <!-- START CHART 1 -->
+					 <div class="div-grey-box">
+						<div
+							class="row"
+							style="display: flex; cursor: pointer;"
+							data-bs-toggle="collapse"
+							data-bs-target="#marital-info"
+							aria-expanded="false"
+							aria-controls="marital-info"
+						>
+							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%"> <!-- font-size: 1.02em -->
+								Marital and civil partnership status<span
+									style="color: gray; font-size: 14pt;"
+									>{@html " &#x24D8; "}</span
+								>
+							</div>
+						</div>
+						<div class="collapse" id="marital-info">
+							<div class="card card-body">
+								Classifies people aged 16 and over according to their legal marital or civil partnership status on Census Day 21 March 2021. In 2011, 'in a civil partnership' was 'in a registered same-sex civil partnership'.  <a
+									href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+									><strong>Statistical bulletins</strong></a
+								>
+							</div>
+						</div>
+						<StackedBarChart data={place && makeData(["marital_and_civil_partnership_status"])}
+							zKey={chart_compare_type}
+							label={chartLabel}/>
+<!-- 							<br>
+						{#if comp_none || (comp_ni && place.type == "ni")}
+							<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+						{:else if comp_2011}
+							<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+						{:else if comp_ni && place.type != "ni"}
+							<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+						{/if} -->
+								
+					</div>
+						<!-- END CHART 1 -->
+						<!-- START CHART 2 -->
+						<div class="div-white-box">
+							
+						</div>
+						<!-- END CHART 2 -->
+						<!-- START CHART 3 -->
+						<div class="div-white-box">
+							
+						</div>
+						<!-- END CHART 3 -->
+							
+				</div>	
+			 </div>
+		 </div>
+		 </div>
+		 <!-- END ACCORDIAN	8  -->
+             <!-- START ACCORDION 9-->
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="panelsStayOpen-headingNine">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseNine" aria-expanded="false" aria-controls="panelsStayOpen-collapseNine">
+						<span class="accordion-button-title">Sexual Orientation</span>
+					  </button>
+					</h2>
+					<div id="panelsStayOpen-collapseNine" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingNine">
+					  <div class="accordion-body">
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Sexual orientation</span>
+	  
 
+						<div class="grid mt" bind:clientWidth={w}>
+	                     <!-- START CHART 1 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#sexual-orientation-info"
+									aria-expanded="false"
+									aria-controls="sexual-orientation-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Sexual orientation<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="sexual-orientation-info">
+									<div class="card card-body">
+										Classifies a person according to their response to the sexual orientation question on the census questionnaire. The question was only asked of people aged 16 and over. Missing answers for sexual orientation were not imputed, so the output classification includes a not stated category. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["sexual_orientation_by_broad_age_band"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 1 -->
+							<!-- START CHART 2 -->
+							<div class="div-white-box">
+								
+							</div>
+	                        <!-- END CHART 2 -->
+							<!-- START CHART 3 -->
+							<div class="div-white-box">
+								
+							</div>
+	                        <!-- END CHART 3 -->
+								
+					</div>	
+				 </div>
+			 </div>
+		     </div>
+             <!-- END ACCORDIAN	9  -->
+             <!-- START ACCORDION 10-->
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="panelsStayOpen-headingTen">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTen" aria-expanded="false" aria-controls="panelsStayOpen-collapseTen">
+						<span class="accordion-button-title">Labour Market & Qualifications</span>
+					  </button>
+					</h2>
+					<div id="panelsStayOpen-collapseTen" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTen">
+					  <div class="accordion-body">
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Highest level of qualifications, Economic activity, Hours worked per week, Industry of employment, Occupation</span>
+	  
 
+						<div class="grid mt" bind:clientWidth={w}>
+	                     <!-- START CHART 1 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#quals-info"
+									aria-expanded="false"
+									aria-controls="quals-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Highest level of qualifications<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="quals-info">
+									<div class="card card-body">
+										The highest level of qualification categories are as follows:
+										<br>
+                                        • No qualifications;
+										<br>
+                                        • Level 1: 1 to 4 GCSEs, O levels, CSEs (any grades); 1 AS Level; NVQ level 1; or equivalent;
+										<br>
+                                        • Level 2: 5 or more GCSEs (A*-C or 9-4), O levels (passes) CSEs (grade 1); 1 A level, 2-3 AS Levels; NVQ level 2, BTEC General, City and Guilds Craft; or equivalent;
+										<br>
+                                        • Apprenticeship;
+										<br>
+                                        • Level 3: 2 or more A Levels, 4 or more AS Levels; NVQ Level 3, BTEC National, OND, ONC, City and Guilds Advanced Craft; or equivalent;
+										<br>
+                                        • Level 4 and above: Degree (BA, BSc), foundation degree, NVQ Level 4 and above, HND, HNC, professional qualifications (teaching or nursing, for example), or equivalent; and
+										<br>
+                                        • Other: Other qualifications, equivalent unknown.
+                                        <br>
+                                        Highest level of qualification is derived from the question asking people aged 16 years and over to indicate all qualifications held. For qualifications gained outside Northern Ireland, respondents were directed to select the nearest equivalent. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["highest_level_of_qualifications"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 1 -->
+							<!-- START CHART 2 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#econ-act-info"
+									aria-expanded="false"
+									aria-controls="econ-act-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Economic activity<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="econ-act-info">
+									<div class="card card-body">
+										Economic activity provides a measure of whether or not a person was an active participant in the labour market at the time of the census. This topic is applicable to people aged 16 and over. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["economic_activity"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 2 -->
+							<!-- START CHART 3 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#hours-info"
+									aria-expanded="false"
+									aria-controls="hours-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Hours worked per week<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="hours-info">
+									<div class="card card-body">
+										The number of hours that a person, aged 16 and over in employment in the week before the census, worked in their main job. This includes paid and unpaid overtime. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["hours_worked"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 3 -->
+							<!-- START CHART 4 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#industry-info"
+									aria-expanded="false"
+									aria-controls="industry-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Industry of employment<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="industry-info">
+									<div class="card card-body">
+										The classification of people aged 16 and over in employment by the industry they work in. This relates to their main job and is determined by the response to the census question asking for a description of the main activity of the business of the person's employer (or own business if self-employed). The responses are coded to a modified version of the UK Standard Industrial Classification of Economic Activities 2007 - UK SIC (2007). <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["industry_of_employment"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 4 -->
+                            <!-- START CHART 5 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#occupation-info"
+									aria-expanded="false"
+									aria-controls="occupation-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Occupation<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="occupation-info">
+									<div class="card card-body">
+										The classification of people aged 16 and over in employment by the occupation they work in. A person's occupation is coded from the response to the question asking for the full title of the main job and the description of what is done in that job, including any supervisory or management responsibilities. It is coded to the 2020 edition of the Standard Occupational Classification (SOC2020). <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["occupation_1_digit"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 5 -->	
+					</div>	
+				 </div>
+			 </div>
+		     </div>
+             <!-- END ACCORDIAN	10  -->
+             <!-- START ACCORDION 11-->
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="panelsStayOpen-headingEleven">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseEleven" aria-expanded="false" aria-controls="panelsStayOpen-collapseEleven">
+						<span class="accordion-button-title">Travel to Work or Study</span>
+					  </button>
+					</h2>
+					<div id="panelsStayOpen-collapseEleven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEleven">
+					  <div class="accordion-body">
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Method of travel to work or study, Distance to place of work or study</span>
+	  
 
-		  </div>
+						<div class="grid mt" bind:clientWidth={w}>
+
+							<!-- START CHART 1 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#method-travel-work-info"
+									aria-expanded="false"
+									aria-controls="method-travel-work-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Method of travel to work<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="method-travel-work-info">
+									<div class="card card-body">
+										The method of travel used for the longest part, by distance, of the usual journey to work. This topic is applicable to people aged 16 and over (excluding full-time students) in employment.
+                                        'Other' includes car or van pool; taxi; motorcycle, scooter or moped; and other method. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["method_of_travel_to_work"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 1 -->
+							<!-- START CHART 2 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#method-travel-study-info"
+									aria-expanded="false"
+									aria-controls="method-travel-study-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Method of travel to study<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="method-travel-study-info">
+									<div class="card card-body">
+										The method of travel used for the longest part, by distance, of the usual journey to place of study (including school). This topic is applicable to people of primary school age and over in full-time education. 
+                                        'Other' includes car or van pool; taxi; motorcycle, scooter or moped; and other method. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["method_of_travel_to_study"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 2 -->
+							<!-- START CHART 3 -->
+							 <div class="div-white-box">
+							
+										
+							</div>
+	                        <!-- END CHART 3 -->
+                            <!-- START CHART 4 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#distance-travel-work-info"
+									aria-expanded="false"
+									aria-controls="distance-travel-work-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Distance to place of work<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="distance-travel-work-info">
+									<div class="card card-body">
+										The distance to place of work is calculated as the straight line distance in kilometres between place of residence and place of work. This topic is applicable to people aged 16 and over (excluding full-time students) in employment.<a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["distance_travelled_to_work"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 4 -->	
+							<!-- START CHART 5 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#distance-travel-study-info"
+									aria-expanded="false"
+									aria-controls="distance-travel-study-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Distance to place of study<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="distance-travel-study-info">
+									<div class="card card-body">
+										The distance to place of study (including school) is calculated as the straight line distance in kilometres between place of residence and place of study. This topic is applicable to people of primary school age and over in full-time education. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["distance_travelled_to_study"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 5 -->	
+					</div>	
+				 </div>
+			 </div>
+		     </div>
+             <!-- END ACCORDIAN	11 -->
+             <!-- START ACCORDION 12-->
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="panelsStayOpen-headingTwelve">
+					  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwelve" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwelveTwelve">
+						<span class="accordion-button-title">Migration</span>
+					  </button>
+					</h2>
+					<div id="panelsStayOpen-collapseTwelve" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwelve">
+					  <div class="accordion-body">
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Address one year ago, Year of arrival to live in NI</span>
+	  
+
+						<div class="grid mt" bind:clientWidth={w}>
+	                     <!-- START CHART 1 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#address-1yr-info"
+									aria-expanded="false"
+									aria-controls="address-1yr-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Address one year ago<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="address-1yr-info">
+									<div class="card card-body">
+										Address one year ago refers to the place of usual residence for a person 12 months before 21 March 2021. This topic is applicable to people aged 1 and over. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["address_one_year_ago"])}
+									zKey={chart_compare_type}
+									label={chartLabel}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 1 -->
+							<!-- START CHART 2 -->
+							<div class="div-grey-box">
+								<div
+									class="row"
+									style="display: flex; cursor: pointer;"
+									data-bs-toggle="collapse"
+									data-bs-target="#year-arr-info"
+									aria-expanded="false"
+									aria-controls="year-arr-info"
+								>
+									<div class="blocktitle" style="margin: 0; width: 100%">
+										Year of arrival to live in NI<span
+											style="color: gray; font-size: 14pt;"
+											>{@html " &#x24D8; "}</span
+										>
+									</div>
+								</div>
+								<div class="collapse" id="year-arr-info">
+									<div class="card card-body">
+										The year that people who were born outside Northern Ireland arrived to live in Northern Ireland. <a
+											href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"
+											><strong>Statistical bulletins</strong></a
+										>
+									</div>
+								</div>
+								<StackedBarChart data={place && makeData(["year_of_arrival"])}
+									zKey={chart_compare_type}
+									label={chartLabel}
+									topic_prev_available = {false}/>
+	<!-- 							<br>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_2011}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{/if} -->
+										
+							</div>
+	                        <!-- END CHART 2 -->
+							<!-- START CHART 3 -->
+							<div class="div-white-box">
+								
+							</div>
+	                        <!-- END CHART 3 -->
+								
+					</div>	
+				 </div>
+			 </div>
+		     </div>
+             <!-- END ACCORDIAN	12  -->
 		  
+		 </div>
 		{:else}
 			<br>
 			<div class="div-grey-box">

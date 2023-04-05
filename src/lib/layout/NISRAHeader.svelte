@@ -20,7 +20,7 @@
 					{/if}
 				</picture>
 			</a>
-			<a href="https://www.nisra.gov.uk/statistics/census">
+			<a href="https://www.nisra.gov.uk/statistics/census/2021-census">
 				<picture style="float: right; top: 0px;">
 					{#if theme.name == 'dark'}
 					<img src="{assets}/img/census-2021-logo-white.svg" alt="Census 2021">

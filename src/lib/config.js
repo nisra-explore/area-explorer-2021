@@ -17,7 +17,6 @@ export const themes = {
 };
 
 export const app_inputs = {
-	//search_data: 'https://datavis.nisra.gov.uk/techlab/drpvze/places_2001.csv',
 	search_data: 'https://datavis.nisra.gov.uk/census/aex-hj77sh/places_dz.csv',
 	//search_data: '/data_jsons_dz/places_dz.csv',
 	app_json_data: 'https://datavis.nisra.gov.uk/census/aex-hj77sh/',
@@ -183,9 +182,135 @@ export const topics = {
 		{ category: 'other', label: 'Other' },
 		{ category: 'none', label: 'None' }
 	],
+	
 	sex: [
 		{ category: 'females', label: 'Females' },
 		{ category: 'males', label: 'Males' }
+	],
+
+	number_of_dependent_children_households: [
+		{ category: 'no_dependent_none', label: 'No dependent children' },
+		{ category: 'one', label: 'One' },
+		{ category: 'two', label: 'Two' },
+		{ category: 'three_or_more', label: 'Three or more' }
+	],
+
+	household_composition_households: [
+		{ category: 'one_person_household', label: 'One person household' },
+		{ category: 'single_family_household_all_pension', label: 'Single family: All pension age and over' },
+		{ category: 'single_family_household_married_civil', label: 'Single family: Married or civil partnership couple family' },
+		{ category: 'single_family_household_cohabiting', label: 'Single family: Cohabiting couple family' },
+		{ category: 'single_family_household_lone_parent', label: 'Single family: Lone parent family' },
+		{ category: 'other_household_types', label: 'Other household types' }
+	],
+
+	marital_and_civil_partnership_status: [
+		{ category: 'single', label: 'Single' },
+		{ category: 'married_civil', label: 'Married or in a civil partnership' },
+		{ category: 'separated', label: 'Separated' },
+		{ category: 'divorced', label: 'Divorced or formerly in a civil partnership' },
+		{ category: 'widowed', label: 'Widowed or surviving partner from a civil partnership' }
+	],
+
+	sexual_orientation_by_broad_age_band: [
+		{ category: 'straight_or_heterosexual', label: 'Straight or heterosexual' },
+		{ category: 'gay_lesbian_bisexual_other', label: 'Gay, lesbian, bisexual or other sexual orientation' },
+		{ category: 'prefer_not_to_say_or_not_stated', label: 'Prefer not to say or not stated' }
+	],
+
+	highest_level_of_qualifications: [
+		{ category: 'no_qualifications', label: 'No qualifications' },
+		{ category: 'level_1_qualifications', label: 'Level 1' },
+		{ category: 'level_2_qualifications', label: 'Level 2' },
+		{ category: 'apprenticeship', label: 'Apprenticeship' },
+		{ category: 'level_3_qualifications', label: 'Level 3' },
+		{ category: 'level_4_qualifications_and_above', label: 'Level 4 and above' },
+		{ category: 'other_qualifications', label: 'Other' }
+	],
+
+	economic_activity: [
+		{ category: 'in_employment', label: 'In employment' },
+		{ category: 'unemployed', label: 'Unemployed' },
+		{ category: 'economically_inactive', label: 'Economically inactive' }
+	],
+
+	hours_worked: [
+		{ category: 'part_time_15_hours_or_less_worked_per_week', label: '15 hours or less' },
+		{ category: 'part_time_16_30_hours_worked_per_week', label: '16-30 hours' },
+		{ category: 'full_time_31_48_hours_worked_per_week', label: '31-48 hours' },
+		{ category: 'full_time_49plus_hours_worked_per_week', label: '49+ hours' }
+	],
+
+	industry_of_employment: [
+		{ category: 'agriculture_energy_water', label: 'Agriculture, energy and water' },
+		{ category: 'manufacturing', label: 'Manufacturing' },
+		{ category: 'construction', label: 'Construction' },
+		{ category: 'distribution_hotel_restaurants', label: 'Distribution, hotels    and restaurants' },
+		{ category: 'transport_communications', label: 'Transport and communication' },
+		{ category: 'financial_etc', label: 'Financial, real estate, professional and administration' },
+		{ category: 'public', label: 'Public administration, education and health' },
+		{ category: 'other', label: 'Other' }
+	],
+
+	occupation_1_digit: [
+		{ category: 'managers_directors_and_senior_officials', label: 'Managers, directors and senior officials' },
+		{ category: 'professional_occupations', label: 'Professional occupations' },
+		{ category: 'associate_professional_and_technical_occupations', label: 'Associate professional and technical occupations' },
+		{ category: 'administrative_and_secretarial_occupations', label: 'Administrative and secretarial occupations' },
+		{ category: 'skilled_trades_occupations', label: 'Skilled trades occupations' },
+		{ category: 'caring_leisure_and_other_service_occupations', label: 'Caring, leisure and other service occupations' },
+		{ category: 'sales_and_customer_service_occupations', label: 'Sales and customer service occupations' },
+		{ category: 'process_plant_and_machine_operatives', label: 'Process, plant and machine operatives' },
+		{ category: 'elementary_occupations', label: 'Elementary occupations' }
+	],
+
+	method_of_travel_to_work: [
+		{ category: 'mainly_at_or_from_home', label: 'Mainly at or from home' },
+		{ category: 'driving_a_car_or_van', label: 'Driving a car or van' },
+		{ category: 'passenger_in_a_car_or_van', label: 'Passenger in a car or van' },
+		{ category: 'walking_bicycle', label: 'Walking or cycling' },
+		{ category: 'bus_train', label: 'Bus or train' },
+		{ category: 'other_method', label: 'Other' }
+	],
+
+	method_of_travel_to_study: [
+		{ category: 'mainly_at_or_from_home', label: 'Mainly at or from home' },
+		{ category: 'driving_a_car_or_van', label: 'Driving a car or van' },
+		{ category: 'passenger_in_a_car_or_van', label: 'Passenger in a car or van' },
+		{ category: 'walking_bicycle', label: 'Walking or cycling' },
+		{ category: 'bus_train', label: 'Bus or train' },
+		{ category: 'other_method', label: 'Other' }
+	],
+
+	distance_travelled_to_work: [
+		{ category: 'mainly_at_or_from_home', label: 'Mainly at or from home' },
+		{ category: 'no_fixed_place', label: 'No fixed place' },
+		{ category: 'less_than_5km', label: 'Less than 5km' },
+		{ category: 'between_5km_and_20km', label: '5km-20km' },
+		{ category: 'over_20km', label: '20km and over' },
+		{ category: 'outside_northern_ireland', label: 'Outside Northern Ireland' }
+	],
+
+	distance_travelled_to_study: [
+		{ category: 'mainly_at_or_from_home', label: 'Mainly at or from home' },
+		{ category: 'no_fixed_place', label: 'No fixed place' },
+		{ category: 'less_than_5km', label: 'Less than 5km' },
+		{ category: 'between_5km_and_20km', label: '5km-20km' },
+		{ category: 'over_20km', label: '20km and over' },
+		{ category: 'outside_northern_ireland', label: 'Outside Northern Ireland' }
+	],
+
+	address_one_year_ago: [
+		{ category: 'same_address_one_year_ago', label: 'Lived at same address' },
+		{ category: 'elsewhere_one_year_ago_within_northern_ireland', label: 'Different address: Within Northern Ireland' },
+		{ category: 'elsewhere_outside_northern_ireland', label: 'Different address: Outside Northern Ireland' }
+	],
+
+	year_of_arrival: [
+		{ category: 'born_in_northern_ireland', label: 'Born in Northern Ireland' },
+		{ category: 'before_2001', label: 'Arrived before 2001' },
+		{ category: 'between_2001_2010', label: 'Arrived 2001-2010' },
+		{ category: 'between_2011_2021', label: 'Arrived 2011-2021' }
 	]
 };
 
