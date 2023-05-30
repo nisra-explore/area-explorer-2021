@@ -1001,7 +1001,7 @@
 							{/if}
 							<div><Legend_ColChart 
 							data = {place && makeData(["age"])} 
-							zkey = {chart_compare_type} /></div>
+							zKey = {chart_compare_type} /></div>
 				</div>
 						<div class = "div-grey-box">
 				<div class="blocktitle" style="margin: 0; width: 100%">Sex</div>
