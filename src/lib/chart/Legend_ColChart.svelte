@@ -5,12 +5,15 @@
 	export let xKey = "x";
 	export let yKey = "y";
 	export let zKey = "ni";
+	// export let wKey = true;
+	export let topic_prev_available = true;
 	export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#801650', '#fbb15f', '#F66068',  'lightgrey'];
 	export let textColor = '#555';
 	export let mutedColor = '#999';
 	export let decimals = null;
 	export let round = false;
 	
+
 	$: sum = data.map(d => d[yKey]).reduce((a, b) => a + b, 0);
 	$: psum = data.map(d => d[zKey]).reduce((a, b) => a + b, 0);
 
@@ -38,12 +41,18 @@
 			</td>
 			<td class="cell-right" style="vertical-align:top">
 				{toPerc(item[yKey])}
-				{#if zKey == "prev"}
-					<span class="" style="color: #1460aa">(2011 {changeStrLegend(Math.round(item[zKey]), '%)')}</span>
-				{:else if zKey}
+				{#if zKey == "prev" && topic_prev_available}
+				<!-- && wKey == true} -->
+					<span class="" style="color: #1460aa">(2011 {changeStrLegend(Math.round(item[zKey]), '%')})</span>
+				{:else if  zKey == "prev" && !topic_prev_available}
+					<span class="" style="color: #1460aa"></span>
+				{:else if zKey == "ni"}
 					<span class="" style="color: #1460aa">(NI {toPerc(item[zKey])})</span>
+				<!-- {:else if zKey == "ni" && wKey == false}
+					<span class="" style="color: #1460aa">(NI {toPerc(item[zKey])})</span> -->
+				<!-- {:else if zKey == "prev" && wKey == false}
+					<span class="" style="color: #1460aa"></span> -->
 				{/if}
-			
 			</td>
 		</tr>
 		{/each}

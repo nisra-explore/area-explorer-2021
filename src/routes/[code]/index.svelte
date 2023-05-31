@@ -253,24 +253,25 @@
 		? "NI 2021"
 		: null;
 	
+	$: topics_available = place.type != "ni" && place.type != "lgd"
+		? false
+		: true;	
+	
 	$: chart_compare_type = comp_none
-				? null
-				: comp_2011
-				? "prev"
-				: !comp_2011 && place.type != "ni"
-				? "ni"
-				: null;
+		? null
+		: comp_2011 && topics_available
+		? "prev"
+		: !comp_2011 && place.type != "ni"
+		? "ni"
+		: null;
 
 
 	$: place && update(place);
 	$: comp_ni = false;
 	$: comp_none = true;
 
-	$: topics_available = place.type != "ni" && place.type != "lgd"
-		? false
-		: true;
 
-
+	$: topic_prev_available = true;
 
 </script>
 
@@ -359,7 +360,7 @@
 						on:click={() => (comp_none = true)}
 						on:click={() => (comp_ni = false)}
 						>2011 data not available</button>
-												{/if}
+						{/if}
 						
 					
 				</div>
@@ -929,12 +930,6 @@
 			  </div>
 	
 
-
-
-			  {#if topics_available} 
-
-
-
 			<div class="accordion-item">
 			  <h2 class="accordion-header" id="panelsStayOpen-headingOne">
 				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
@@ -980,10 +975,12 @@
 							>
 								<ColChart
 									data={place && makeData(["age"])}
-									zKey={chart_compare_type}
-								/>
+									zKey={chart_compare_type}/>
+									<!-- wKey="{topics_available}" -->
+								
 							</div>
-							{#if !comp_none && chartLabel}
+							<!-- {#if !comp_none && chartLabel} -->
+							{#if (comp_ni && chartLabel) || (comp_2011 && chartLabel && topics_available)}
 								<div class="text-small muted; ">
 									<svg
 										width="25"
@@ -1001,12 +998,15 @@
 							{/if}
 							<div><Legend_ColChart 
 							data = {place && makeData(["age"])} 
-							zKey = {chart_compare_type} /></div>
+							zKey = {chart_compare_type}/>
+							<!-- wKey="{topics_available}"  -->
+						    </div>
 				</div>
 						<div class = "div-grey-box">
-				<div class="blocktitle" style="margin: 0; width: 100%">Sex</div>
+				<div class="blocktitle" style="margin: 0; width: 100%">Sex </div>
 
 				<StackedBarChart data="{place && makeData(['sex'])}" zKey="{chart_compare_type}" label={chartLabel}/>
+				<!-- wKey="{topics_available}" -->
 <!-- 				<br>
 				{#if comp_none || (comp_ni && place.type == "ni")}
 					<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.sex,"sex")} zKey="group"	label={chartLabel}/>
@@ -1017,6 +1017,7 @@
 				{/if}
  -->
 			</div>
+			
 			 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#hhsize-info" aria-expanded="false" aria-controls="hhsize-info">
 					<div class="blocktitle" style="margin: 0; width: 100%">Household size<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
@@ -1027,7 +1028,10 @@
 					</div>
 				</div>
 
-				<StackedBarChart data="{place && makeData(['hh_size'])}" zKey="{chart_compare_type}" label={chartLabel}/>
+				<StackedBarChart data="{place && makeData(['hh_size'])}" 
+				zKey="{chart_compare_type}"
+				label={chartLabel}/>
+				<!-- wKey="{topics_available}"  -->
 <!-- 				<br>
 				{#if comp_none || (comp_ni && place.type == "ni")}
 					<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
@@ -1043,6 +1047,14 @@
 				</div>
 			  </div>
 			</div>
+		</div>
+		
+
+
+		    {#if topics_available} 
+
+
+
 			<div class="accordion-item">
 			  <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
 				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -2659,7 +2671,7 @@
 		     </div>
              <!-- END ACCORDIAN	12  -->
 		  
-		 </div>
+		 
 		{:else}
 			<br>
 			<div class="div-grey-box">

@@ -6,6 +6,7 @@
 	export let xKey = "x";
 	export let yKey = "y";
 	export let zKey = "ni";
+	// export let wKey = true;
   export let topic_prev_available = true;
 
 export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#801650', '#fbb15f', '#F66068',  '#00695c'];
@@ -18,7 +19,8 @@ export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#
 <div class="chart" style="padding-top: 3px; height: {zKey ? height * .72 : height}px;">
 	<StackedBar {data} {yKey} {colors}/>
 </div>
-{#if (zKey && topic_prev_available) || (zKey == "ni") }
+{#if (zKey && topic_prev_available ) || (zKey == "ni") }
+<!-- && wKey == true -->
 <div class="chart" style="height: {height * .28}px;">
 	<StackedBar {data} yKey={zKey} {colors}/>
 	{#if label}
@@ -26,7 +28,8 @@ export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#
 	{/if}
 </div>
 {/if}
-{#if zKey == "prev" && !topic_prev_available }
+{#if (zKey == "prev" && !topic_prev_available)}
+<!-- || (zKey == "prev" && wKey == false) -->
 <div class="chart" style="height: {height * .28}px;">
 	<StackedBar {data} yKey={zKey} {colors}/>
 	<div class="label" style = "background-color: #d8d8d8 ;	color: #000000;">2011 comparison not available</div>
@@ -35,6 +38,7 @@ export let colors = ['#00205B','#6C63AC', '#781C87',   '#C11B71', '#FB7979', '#
 
 <div class="legend">
 	<Legend {data} {xKey} {yKey} {zKey} {topic_prev_available} {decimals} {colors}/>
+	<!-- {wKey} -->
 </div>
 
 

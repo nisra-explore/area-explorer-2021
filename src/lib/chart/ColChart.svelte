@@ -13,6 +13,7 @@
 	export let xKey = "x";
 	export let yKey = 'y';
 	export let zKey= null;
+	// export let wKey = true;
 	
 	export let colors = ['#00205B','#00205B', '#00205B',   '#00205B'];
 

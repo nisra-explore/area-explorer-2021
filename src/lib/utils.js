@@ -21,7 +21,7 @@ export function changeStr(val, suffix = '', decimals = 0) {
 }
 
 export function changeStrLegend(val, suffix = '', decimals = 0) {
-  return val != 0 ? Math.abs(val).toFixed(decimals) + suffix : suffix == 'pp' ? 'n/c' : '<1%)';
+  return val != 0 ? Math.abs(val).toFixed(decimals) + suffix : suffix == 'pp' ? 'n/c' : '<1%';
 }
 
 export function adjectify(count, rank, words = ['higher', 'lower']) {
