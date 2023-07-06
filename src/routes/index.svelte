@@ -42,8 +42,7 @@
 
 
   </div>
-  <div>This application contains data for Northern Ireland, the 11 Local Government Districts and the areas within.  
-    It will be updated with more topics and lower geographies as they are released.  
+  <div>This application contains data for Northern Ireland, the 11 Local Government Districts and the areas within. This was most recently updated 6 July 2023 to make all topics available down to Data Zone.  
   </div>
 </Section>
 

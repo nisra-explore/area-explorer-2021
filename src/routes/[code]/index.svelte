@@ -1063,7 +1063,7 @@
 			  </h2>
 			  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
 				<div class="accordion-body">
-					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Country of birth, Passport(s) held, National identity (person based)
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Country of birth, Passport(s) held, National identity (person based)</span>
 
 					<div class="grid mt" bind:clientWidth={w}>
 						<div class="div-grey-box">
@@ -1081,6 +1081,7 @@
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
+								
 							</div>
 							<div class="collapse" id="cob-info">
 								<div class="card card-body">
