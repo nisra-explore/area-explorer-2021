@@ -17,9 +17,9 @@ export const themes = {
 };
 
 export const app_inputs = {
-	search_data: 'https://datavis.nisra.gov.uk/census/aex-hifg11/places_dz.csv',
+	search_data: 'https://datavis.nisra.gov.uk/census/aex-hj77sh/places_dz.csv',
 	//search_data: '/data_jsons_dz/places_dz.csv',
-	app_json_data: 'https://datavis.nisra.gov.uk/census/aex-hifg11/',
+	app_json_data: 'https://datavis.nisra.gov.uk/census/aex-hj77sh/',
 	//app_json_data: '/data_jsons_dz/',
 	base: 'https://explore.nisra.gov.uk/area-explorer-2021/'
 };
@@ -178,7 +178,7 @@ export const topics = {
 
 	central_heating: [
 		{ category: 'oil_only', label: 'Oil only' },
-		{ category: 'mains_gas_only', label: 'Gas only' },
+		{ category: 'gas_only', label: 'Gas only' },
 		{ category: 'other', label: 'Other' },
 		{ category: 'none', label: 'None' }
 	],

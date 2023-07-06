@@ -1051,7 +1051,7 @@
 		
 
 
-		    {#if topics_available} 
+		    <!-- {#if topics_available}  -->
 
 
 
@@ -1384,7 +1384,7 @@
 									</div>
 						 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#relbup-info" aria-expanded="false" aria-controls="relbup-info">
-					<div class="blocktitle" style="margin: 0; width: 100%">Religion, Religion brought up<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%">Religion or religion brought up in<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="relbup-info">
 					<div class="card card-body">
@@ -2672,13 +2672,13 @@
              <!-- END ACCORDIAN	12  -->
 		  
 		 
-		{:else}
+		<!-- {:else}
 			<br>
 			<div class="div-grey-box">
 				<h3 style="margin: 0 0 10px 0; line-height: 1.78;">No other topics are available.</h3>
 				 Further data will be added to this app as it is released.
 			</div>
-		{/if}
+		{/if} -->
 		
 	</div>
 	{/if}
