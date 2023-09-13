@@ -42,7 +42,8 @@
 
 
   </div>
-  <div>This application contains data for Northern Ireland, the 11 Local Government Districts and the areas within. This was most recently updated 6 July 2023 to make all topics available down to Data Zone.  
+  <div>This application contains data for Northern Ireland, the 11 Local Government Districts and the areas within. This was most recently updated on 13 September 2023 to revise data relating to the Household Structure topic. 
+    Refer to the <a href="https://www.nisra.gov.uk/statistics/2021-census/results/quality-notes-issues-and-corrections">Census 2021 Quality notes, issues and corrections page</a> for more information.   
   </div>
 </Section>
 
