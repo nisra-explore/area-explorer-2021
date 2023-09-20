@@ -53,8 +53,8 @@
 			<div class="column left">
 				<h3>Links</h3><br>
 				<ul>
+					<li><a href="https://build.nisra.gov.uk/en/" class="link" style="color: #ffffff">Census 2021 Flexible Table Builder</a></li><br>
 					<li><a href="https://data.nisra.gov.uk/" class="link" style="color: #ffffff">NISRA Data Portal</a></li><br/>
-					<li><a href="http://www.ninis.nisra.gov.uk/" class="link" style="color: #ffffff">NINIS</a></li><br>
 					<li><a href="https://www.opendatani.gov.uk/" class="link" style="color: #ffffff">OpenDataNI</a></li><br/>
 					<li><a href="https://www.nidirect.gov.uk" class="link" style="color: #ffffff">NIDirect</a></li><br>
 					<li><a href="https://www.gov.uk/" class="link" style="color: #ffffff">GOV.UK</a></li><br>
@@ -134,10 +134,10 @@
   		padding: 40px;
 	}
 	.left {
-		max-width: 30%;
+		max-width: 35%;
 	}
 	.right {
-		max-width: 70%;
+		max-width: 65%;
 	}
 	.row:after {
 		content: "";
