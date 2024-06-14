@@ -395,7 +395,7 @@
 							class="btn"
 							style="width: 33%"
 							alt="Return to the landing page"
-							onclick="window.location.href='{base}';"
+							onclick="window.location.href='{base}/';"
 							>Menu </button>
 						<button
 							class="btn"
