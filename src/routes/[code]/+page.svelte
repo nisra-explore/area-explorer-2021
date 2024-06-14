@@ -46,7 +46,7 @@
 
 		let keys = topics[category].map((d) => d.category);
 		let labels = topics[category].map((d) => (d.label ? d.label : d.category));
-		let data = keys.map((key, i) => {
+		let y_data = keys.map((key, i) => {
 			if (Array.isArray(key)) {
 				return {
 					x: labels[i],
@@ -64,7 +64,7 @@
 			}
 		});
 
-		return data;
+		return y_data;
 	}
 
 	function makeDataGroupSort(data, key) {
