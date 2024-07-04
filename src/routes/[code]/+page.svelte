@@ -465,7 +465,7 @@
 					aria-controls="pop-info"
 				>
 					<div class="blocktitle" style="margin: 0; width: 100%">
-						Population <span style="color: gray; font-size: 14pt;"
+						Population <span style="color: #6E6E6E; font-size: 14pt;"
 							>{@html " &#x24D8; "}
 						</span>
 					</div>
@@ -541,7 +541,7 @@
 					aria-controls="households-info"
 				>
 					<div class="blocktitle" style="margin: 0; width: 100%">
-						Households<span style="color: gray; font-size: 14pt;"
+						Households<span style="color: #6E6E6E; font-size: 14pt;"
 							>{@html " &#x24D8; "}</span
 						>
 					</div>
@@ -610,7 +610,7 @@
 					<!-- Explore <span style="color: #93328E">{data.place.name}</span> -->
 					{#if data.place.type != "ni"}
 					Explore <span style="color: #93328E">{data.place.name}</span> 
-					<span style="color: #a19e9e">- {geog_types[data.place.type].name}</span>
+					<span style="color: #6E6E6E">- {geog_types[data.place.type].name}</span>
 					{:else} 
 					Explore <span style="color: #93328E">{data.place.name}</span>
 					{/if}
@@ -792,7 +792,7 @@
 								aria-controls="location-info"
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
-									Location<span style="color: gray; font-size: 14pt;"
+									Location<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -831,7 +831,7 @@
 								aria-controls="Area-info"
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
-									Area <span style="color: gray; font-size: 14pt;"
+									Area <span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -855,7 +855,7 @@
 								aria-expanded="false"
 								aria-controls="popden-info">
 								<div class="blocktitle" style="margin: 0; width: 100%">
-									Population density<span style="color: gray; font-size: 14pt;"
+									Population density<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -912,7 +912,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Broad age bands (years) <span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -978,7 +978,7 @@
 			
 			 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#hhsize-info" aria-expanded="false" aria-controls="hhsize-info">
-					<div class="blocktitle" style="margin: 0; width: 100%">Household size<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%">Household size<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="hhsize-info">
 					<div class="card card-body">
@@ -1035,7 +1035,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Country of birth<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1074,7 +1074,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Passport(s) held<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1115,7 +1115,7 @@
 									style="font-size: 1.02em; margin: 0; width: 100%"
 								>
 									National identity (person based)<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1172,7 +1172,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Main language<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1212,7 +1212,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Knowledge of Irish<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1253,7 +1253,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Knowledge of Ulster-Scots<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1313,7 +1313,7 @@
 								aria-controls="rel-info"
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
-									Religion<span style="color: gray; font-size: 14pt;"
+									Religion<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1343,7 +1343,7 @@
 									</div>
 						 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#relbup-info" aria-expanded="false" aria-controls="relbup-info">
-					<div class="blocktitle" style="margin: 0; width: 100%">Religion or religion brought up in<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%">Religion or religion brought up in<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="relbup-info">
 					<div class="card card-body">
@@ -1371,7 +1371,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Ethnic group<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1429,7 +1429,7 @@
 											style="margin: 0; width: 100%"
 										>
 											General health<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1474,7 +1474,7 @@
 											style="font-size: 0.87em; margin: 0; width: 100%"
 										>
 											Long-term health problem or disability<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1518,7 +1518,7 @@
 											style="font-size: 1.02em; margin: 0; width: 100%"
 										>
 											Long-term health conditions<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1563,7 +1563,7 @@
 											style="font-size: 1.02em; margin: 0; width: 100%"
 										>
 											Unpaid care<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1631,7 +1631,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Accommodation type<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1667,7 +1667,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Household adaptations<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1707,7 +1707,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Central heating<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1747,7 +1747,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Renewable energy systems<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1793,7 +1793,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Household tenure<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1833,7 +1833,7 @@
 							>
 								<div class="blocktitle" style="margin: 0; width: 100%">
 									Car or van availability<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1894,7 +1894,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Number of dependent children<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1933,7 +1933,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Household composition<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1997,7 +1997,7 @@
 						>
 							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%"> <!-- font-size: 1.02em -->
 								Marital and civil partnership status<span
-									style="color: gray; font-size: 14pt;"
+									style="color: #6E6E6E; font-size: 14pt;"
 									>{@html " &#x24D8; "}</span
 								>
 							</div>
@@ -2065,7 +2065,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Sexual orientation<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2134,7 +2134,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Highest level of qualifications<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2189,7 +2189,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Economic activity<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2228,7 +2228,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Hours worked per week<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2267,7 +2267,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Industry of employment<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2306,7 +2306,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Occupation<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2365,7 +2365,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Method of travel to work<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2406,7 +2406,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Method of travel to study<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2453,7 +2453,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Distance to place of work<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2493,7 +2493,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Distance to place of study<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2551,7 +2551,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Address one year ago<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2590,7 +2590,7 @@
 								>
 									<div class="blocktitle" style="margin: 0; width: 100%">
 										Year of arrival to live in NI<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
