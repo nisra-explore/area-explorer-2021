@@ -1769,7 +1769,7 @@
 								topic_prev_available = {false}
 							/>
 
-							<br>
+							
 <!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
 								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
@@ -1855,7 +1855,7 @@
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
-							<br>
+						
 <!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
 								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
