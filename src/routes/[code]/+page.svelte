@@ -187,11 +187,11 @@
 	}
 
 	function mapSelect(ev) {
-		goto(`${base}/${ev.detail.code}/`, { noscroll: true });
+		goto(`${base}/${ev.detail.code}/`, { noScroll: true, keepFocus: true });
 	}
 
 	function menuSelect(ev) {
-		goto(`${base}/${ev.detail.value}/`, { noscroll: true });
+		goto(`${base}/${ev.detail.value}/`, { noScroll: true, keepFocus: true });
 	}
 
 	function onResize() {
@@ -253,11 +253,11 @@
 		<div class="grid mtl">
 			<div>
 				<span class="text-small">
-					<a href="{base}/" sveltekit:noscroll>Home</a
+					<a href="{base}/" data-sveltekit-noscroll data-sveltekit-keepfocus>Home</a
 					>{@html " &gt; "}
 					{#if data.place.parents[0]}
 						{#each [...data.place.parents].reverse() as parent, i}
-							<a href="{base}/{parent.code}/" sveltekit:noscroll
+							<a href="{base}/{parent.code}/" data-sveltekit-noscroll data-sveltekit-keepfocus
 								>{parent.name}</a
 							>{@html " &gt; "}
 						{/each}
@@ -741,7 +741,7 @@
 				<span class="text-bold">Parents of {data.place.name} </span><br/>
 				<span class="text-small">
 				{#each [...data.place.parents].reverse() as parent, i}
-				<span style="display: block; margin-left: {i > 0 ? (i - 1) * 15 : 0}px">{@html i > 0 ? '↳ ' : ''}<a href="{base}/{parent.code}" sveltekit:noscroll>{parent.name}</a></span>
+				<span style="display: block; margin-left: {i > 0 ? (i - 1) * 15 : 0}px">{@html i > 0 ? '↳ ' : ''}<a href="{base}/{parent.code}" data-sveltekit-noscroll data-sveltekit-keepfocus>{parent.name}</a></span>
 				{/each}
 			</span>
 			{:else}
@@ -753,7 +753,7 @@
 				<span class="text-bold">{data.place.children[0] ? geog_types[data.place.children[0].type].pl : 'Areas'} within {data.place.name}</span><br/>
 				<span class="text-small">
 				{#each data.place.children as child, i}
-				<a href="{base}/{child.code}" sveltekit:noscroll>{child.name}</a>{ i < data.place.children.length - 1 ? ', ' : ''}
+				<a href="{base}/{child.code}" data-sveltekit-noscroll data-sveltekit-keepfocus>{child.name}</a>{ i < data.place.children.length - 1 ? ', ' : ''}
 				{/each}
 			</span>
 			{:else}
