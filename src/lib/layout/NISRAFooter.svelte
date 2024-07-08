@@ -89,7 +89,7 @@
 
 <style>
 	footer {
-		padding-bottom: 5px;
+		padding-bottom: 18px;
 		font-size: 18px;
 	}
 	footer a.link {
