@@ -81,7 +81,7 @@
 				<li><a href="https://www.nisra.gov.uk/terms-and-conditions" class="link" style="color: #ffffff">Terms and conditions</a></li>
 				<li><a href="https://www.nisra.gov.uk/cookies" class="link" style="color: #ffffff">Cookies</a></li>
 				<li><a href="https://www.nisra.gov.uk/nisra-privacy-notice" class="link" style="color: #ffffff">Privacy</a></li>
-				<li><a href="https://www.nisra.gov.uk/accessibility-statement-nisra" class="link" style="color: #ffffff">Accessibility Statement</a></li>
+				<li><a href="https://datavis.nisra.gov.uk/dissemination/accessibility-statement-visualisations.html" class="link" style="color: #ffffff">Accessibility Statement</a></li>
 			</ul>
 		</div>
 	</div>
