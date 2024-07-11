@@ -55,25 +55,25 @@
 	<div class="col-wide" data-analytics="footer">
 		<div class="row">
 			<div class="column left">
-				<h3>Links</h3><br>
+				<h3 style="padding-top: 0px; padding-bottom: 25px">Links</h3>
 				<ul>
-					<li><a href="https://build.nisra.gov.uk/en/" class="link" style="color: #ffffff">Census 2021 Flexible Table Builder</a></li><br>
-					<li><a href="https://data.nisra.gov.uk/" class="link" style="color: #ffffff">NISRA Data Portal</a></li><br/>
-					<li><a href="https://www.opendatani.gov.uk/" class="link" style="color: #ffffff">OpenDataNI</a></li><br/>
-					<li><a href="https://www.nidirect.gov.uk" class="link" style="color: #ffffff">NIDirect</a></li><br>
-					<li><a href="https://www.gov.uk/" class="link" style="color: #ffffff">GOV.UK</a></li><br>
+					<li><a href="https://build.nisra.gov.uk/en/" class="link" style="color: #ffffff">Census 2021 Flexible Table Builder</a></li>
+					<li><a href="https://data.nisra.gov.uk/" class="link" style="color: #ffffff">NISRA Data Portal</a></li>
+					<li><a href="https://www.opendatani.gov.uk/" class="link" style="color: #ffffff">OpenDataNI</a></li>
+					<li><a href="https://www.nidirect.gov.uk" class="link" style="color: #ffffff">NIDirect</a></li>
+					<li><a href="https://www.gov.uk/" class="link" style="color: #ffffff">GOV.UK</a></li>
 				</ul>
 			</div>	
 			<div class="column right">
-				<h3>Follow NISRA</h3><br>
+				<h3 style="padding-bottom: 25px">Follow NISRA</h3>
 				<ul> 
-					<li><a href="https://www.facebook.com/nisra.gov.uk" class="link" style="color: #ffffff">Facebook</a></li><br>
-					<li><a href="https://twitter.com/NISRA" class="link" style="color: #ffffff">Twitter</a></li><br>
-					<li><a href="https://www.youtube.com/user/nisrastats" class="link" style="color: #ffffff">YouTube</a></li><br>
+					<li><a href="https://www.facebook.com/nisra.gov.uk" class="link" style="color: #ffffff">Facebook</a></li>
+					<li><a href="https://twitter.com/NISRA" class="link" style="color: #ffffff">Twitter</a></li>
+					<li><a href="https://www.youtube.com/user/nisrastats" class="link" style="color: #ffffff">YouTube</a></li>
 				</ul>
 			</div>
 		</div>
-		<br>
+		
 		<div class="flex-list">
 			<ul>
 				<li>&copy Crown Copyright</li>
@@ -89,8 +89,8 @@
 
 <style>
 	footer {
-		padding-bottom: 18px;
-		font-size: 18px;
+		padding-bottom: 32px;
+		font-size: 17px;
 	}
 	footer a.link {
 		-webkit-box-sizing: border-box;
@@ -115,7 +115,7 @@
 	}
 	li {
 		margin-right: 18px;
-		display: inline-block;
+		list-style-type: none;
 	}
 /* 	.logo-img {
 		margin-bottom: 2px;
@@ -135,14 +135,21 @@
 	} */
 	.column {
   		float: left;
-  		padding: 40px;
+  		padding-left: 40px;
+  		padding-right: 40px;
+		padding-top: 10px;
+  		padding-bottom: 10px;
+  		
 	}
 	.left {
-		max-width: 35%;
+		max-width: 30%;
+		padding-top: 0px;
+  		padding-bottom: 10px;
 	}
 	.right {
-		max-width: 65%;
-	}
+		max-width: 70%;
+		padding-top: 0px;
+  		padding-bottom: 10px;	}
 	.row:after {
 		content: "";
 		display: table;
@@ -150,8 +157,11 @@
 	}
 	.flex-list {
 		position: relative;
-		margin: 1em;
+		margin: 0em;
 		overflow: hidden;
+		padding-top: 10px;
+  		padding-bottom: 0px;
+
 
 	}
 	.flex-list ul {
