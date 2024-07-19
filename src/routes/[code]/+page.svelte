@@ -2678,14 +2678,14 @@
 		color: darkgreen;
 	}
 	.increase::before {
-		content: "▲";
+		content: "▲" / "Increase of";
 		color: darkgreen;
 	}
 	.decrease {
 		color: darkred;
 	}
 	.decrease::before {
-		content: "▼";
+		content: "▼" / "Decrease of";
 		color: darkred;
 	}
 	.nochange {
