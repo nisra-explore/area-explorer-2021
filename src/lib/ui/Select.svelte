@@ -61,6 +61,10 @@
 			value: null
 		});
 	}
+
+	function typing(ev) {
+		expanded = true;
+	}
 	
 	function doKeydown(ev) {
 		if (expanded && filtered[0] && Number.isInteger(active)) {
@@ -94,6 +98,45 @@
 		selectedPrev = selected;
 	}
 </script>
+
+<svelte:window on:click={onClick}/>
+
+<div id="select" class:active={expanded} on:keydown={doKeydown}>
+	{#if selectedItem && !search}
+	<a id="toggle" class="selected" on:click={toggle}>
+		<span class="selection">{selectedItem[label]} {#if group}<small>{selectedItem[group]}</small>{/if}</span>
+		<span class="button close" on:click={unSelect}>&nbsp;</span>
+	</a>
+	{:else}
+	<a id="toggle" on:click={toggle} on:focus={toggle}>
+		<input on:keydown={typing} type="text" placeholder={placeholder} bind:value={filter} autocomplete="false" bind:this={input} on:keyup={doKeyup} autofocus="autofocus" onfocus="this.select()" />
+		<span class="button" class:search class:down={!search}>&nbsp;</span>
+	</a>
+	{/if}
+	{#if expanded}
+	<div id="dropdown" bind:this={el} style="top: 0; margin-top: 50px">
+		<ul>
+			{#if filter.length < 3}
+			<li>Type a name...</li>
+			{:else if filtered[0] && group}
+			{#each filtered as option, i}
+			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
+				{option[label]} <small>{option[group]}</small>
+			</li>
+			{/each}
+			{:else if filtered[0]}
+			{#each filtered as option, i}
+			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
+				{option[label]}
+			</li>
+			{/each}
+			{:else}
+			<li>No results</li>
+			{/if}
+		</ul>
+	</div>
+	{/if}
+</div>
 
 <style>
 	#select {
@@ -146,10 +189,10 @@
 		font-weight: inherit;
 		line-height: inherit;
 		display: inline-block;
-		padding: 10px 5px;
+		padding: 8px 5px;
 		margin: 0;
 		background-color: #fff;
-		border: 2px solid #00205b !important;
+		/* border: 2px solid #00205b !important; */
 		border-radius: 0px;
 		-webkit-appearance: none;
 		-moz-appearance: none;
@@ -216,43 +259,3 @@
 		color: grey;
 	}
 </style>
-
-<svelte:window on:click={onClick}/>
-
-<div id="select" class:active={expanded} on:keydown={doKeydown}>
-	{#if selectedItem && !search}
-	<a id="toggle" class="selected" on:click={toggle}>
-		<span class="selection">{selectedItem[label]} {#if group}<small>{selectedItem[group]}</small>{/if}</span>
-		<span class="button close" on:click={unSelect}>&nbsp;</span>
-	</a>
-	{:else}
-	<a id="toggle" on:click={toggle}>
-		<span>{placeholder ? placeholder : 'Select one'}</span>
-		<span class="button" class:search class:down={!search}>&nbsp;</span>
-	</a>
-	{/if}
-	{#if expanded}
-	<div id="dropdown" bind:this={el} style="top: 0;">
-		<input type="text" placeholder="" bind:value={filter} autocomplete="false" bind:this={input} on:keyup={doKeyup} autofocus="autofocus" onfocus="this.select()" />
-		<ul>
-			{#if filter.length < 3}
-			<li>Type a name...</li>
-			{:else if filtered[0] && group}
-			{#each filtered as option, i}
-			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
-				{option[label]} <small>{option[group]}</small>
-			</li>
-			{/each}
-			{:else if filtered[0]}
-			{#each filtered as option, i}
-			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
-				{option[label]}
-			</li>
-			{/each}
-			{:else}
-			<li>No results</li>
-			{/if}
-		</ul>
-	</div>
-	{/if}
-</div>

@@ -231,6 +231,10 @@
 
 	$: topic_prev_available = true;
 
+	function changeAria () {
+	card.ariaHidden = !row.ariaExpanded;
+}
+
 </script>
 
 <svelte:head>
@@ -464,8 +468,8 @@
 					aria-expanded="false"
 					aria-controls="pop-info"
 				>
-					<div class="blocktitle" style="margin: 0; width: 100%">
-						Population <span style="color: gray; font-size: 14pt;"
+					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+						Population <span style="color: #6E6E6E; font-size: 14pt;"
 							>{@html " &#x24D8; "}
 						</span>
 					</div>
@@ -540,8 +544,8 @@
 					aria-expanded="false"
 					aria-controls="households-info"
 				>
-					<div class="blocktitle" style="margin: 0; width: 100%">
-						Households<span style="color: gray; font-size: 14pt;"
+					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+						Households<span style="color: #6E6E6E; font-size: 14pt;"
 							>{@html " &#x24D8; "}</span
 						>
 					</div>
@@ -610,7 +614,7 @@
 					<!-- Explore <span style="color: #93328E">{data.place.name}</span> -->
 					{#if data.place.type != "ni"}
 					Explore <span style="color: #93328E">{data.place.name}</span> 
-					<span style="color: #a19e9e">- {geog_types[data.place.type].name}</span>
+					<span style="color: #6E6E6E">- {geog_types[data.place.type].name}</span>
 					{:else} 
 					Explore <span style="color: #93328E">{data.place.name}</span>
 					{/if}
@@ -791,8 +795,8 @@
 								aria-expanded="false"
 								aria-controls="location-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
-									Location<span style="color: gray; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									Location<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -830,8 +834,8 @@
 								aria-expanded="false"
 								aria-controls="Area-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
-									Area <span style="color: gray; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									Area <span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -854,8 +858,8 @@
 								data-bs-target="#popden-info"
 								aria-expanded="false"
 								aria-controls="popden-info">
-								<div class="blocktitle" style="margin: 0; width: 100%">
-									Population density<span style="color: gray; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									Population density<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -910,9 +914,9 @@
 								aria-expanded="false"
 								aria-controls="broadagebands-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Broad age bands (years) <span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -961,7 +965,7 @@
 						    </div>
 				</div>
 						<div class = "div-grey-box">
-				<div class="blocktitle" style="margin: 0; width: 100%">Sex </div>
+				<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Sex </div>
 
 				<StackedBarChart data="{data.place && makeData(['sex'])}" zKey="{chart_compare_type}" label={chartLabel}/>
 				<!-- wKey="{topics_available}" -->
@@ -978,7 +982,7 @@
 			
 			 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#hhsize-info" aria-expanded="false" aria-controls="hhsize-info">
-					<div class="blocktitle" style="margin: 0; width: 100%">Household size<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Household size<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="hhsize-info">
 					<div class="card card-body">
@@ -1033,9 +1037,9 @@
 								aria-expanded="false"
 								aria-controls="cob-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Country of birth<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1072,9 +1076,9 @@
 								aria-expanded="false"
 								aria-controls="passport-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Passport(s) held<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1112,10 +1116,10 @@
 							>
 								<div
 									class="blocktitle"
-									style="font-size: 1.02em; margin: 0; width: 100%"
+									style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
 								>
 									National identity (person based)<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1170,9 +1174,9 @@
 								aria-expanded="false"
 								aria-controls="mainlang-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Main language<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1210,9 +1214,9 @@
 								aria-expanded="false"
 								aria-controls="irish-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Knowledge of Irish<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1251,9 +1255,9 @@
 								aria-expanded="false"
 								aria-controls="ulster-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Knowledge of Ulster-Scots<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1312,8 +1316,8 @@
 								aria-expanded="false"
 								aria-controls="rel-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
-									Religion<span style="color: gray; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									Religion<span style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1343,7 +1347,7 @@
 									</div>
 						 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#relbup-info" aria-expanded="false" aria-controls="relbup-info">
-					<div class="blocktitle" style="margin: 0; width: 100%">Religion or religion brought up in<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Religion or religion brought up in<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="relbup-info">
 					<div class="card card-body">
@@ -1369,9 +1373,9 @@
 								aria-expanded="false"
 								aria-controls="ethnic-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Ethnic group<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1426,10 +1430,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="margin: 0; width: 100%"
+											style="margin: 0; width: 100%" on:click={changeAria}
 										>
 											General health<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1471,10 +1475,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 0.87em; margin: 0; width: 100%"
+											style="font-size: 0.87em; margin: 0; width: 100%" on:click={changeAria}
 										>
 											Long-term health problem or disability<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1515,10 +1519,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 1.02em; margin: 0; width: 100%"
+											style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
 										>
 											Long-term health conditions<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1560,10 +1564,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 1.02em; margin: 0; width: 100%"
+											style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
 										>
 											Unpaid care<span
-												style="color: gray; font-size: 14pt;"
+												style="color: #6E6E6E; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1629,9 +1633,9 @@
 								aria-expanded="false"
 								aria-controls="acc-type-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Accommodation type<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1665,9 +1669,9 @@
 								aria-expanded="false"
 								aria-controls="adapt-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Household adaptations<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1705,9 +1709,9 @@
 								aria-expanded="false"
 								aria-controls="heat-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Central heating<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1745,9 +1749,9 @@
 								aria-expanded="false"
 								aria-controls="renew-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Renewable energy systems<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1769,7 +1773,7 @@
 								topic_prev_available = {false}
 							/>
 
-							<br>
+							
 <!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
 								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
@@ -1791,9 +1795,9 @@
 								aria-expanded="false"
 								aria-controls="tenure-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Household tenure<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1831,9 +1835,9 @@
 								aria-expanded="false"
 								aria-controls="car-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%">
+								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 									Car or van availability<span
-										style="color: gray; font-size: 14pt;"
+										style="color: #6E6E6E; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1855,7 +1859,7 @@
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
-							<br>
+						
 <!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
 								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
@@ -1892,9 +1896,9 @@
 									aria-expanded="false"
 									aria-controls="dep-child-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Number of dependent children<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1931,9 +1935,9 @@
 									aria-expanded="false"
 									aria-controls="hh-comp-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Household composition<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1995,9 +1999,9 @@
 							aria-expanded="false"
 							aria-controls="marital-info"
 						>
-							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%"> <!-- font-size: 1.02em -->
+							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%" on:click={changeAria}> <!-- font-size: 1.02em -->
 								Marital and civil partnership status<span
-									style="color: gray; font-size: 14pt;"
+									style="color: #6E6E6E; font-size: 14pt;"
 									>{@html " &#x24D8; "}</span
 								>
 							</div>
@@ -2063,9 +2067,9 @@
 									aria-expanded="false"
 									aria-controls="sexual-orientation-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Sexual orientation<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2132,9 +2136,9 @@
 									aria-expanded="false"
 									aria-controls="quals-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Highest level of qualifications<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2187,9 +2191,9 @@
 									aria-expanded="false"
 									aria-controls="econ-act-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Economic activity<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2226,9 +2230,9 @@
 									aria-expanded="false"
 									aria-controls="hours-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Hours worked per week<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2265,9 +2269,9 @@
 									aria-expanded="false"
 									aria-controls="industry-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Industry of employment<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2304,9 +2308,9 @@
 									aria-expanded="false"
 									aria-controls="occupation-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Occupation<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2363,9 +2367,9 @@
 									aria-expanded="false"
 									aria-controls="method-travel-work-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Method of travel to work<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2404,9 +2408,9 @@
 									aria-expanded="false"
 									aria-controls="method-travel-study-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Method of travel to study<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2451,9 +2455,9 @@
 									aria-expanded="false"
 									aria-controls="distance-travel-work-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Distance to place of work<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2491,9 +2495,9 @@
 									aria-expanded="false"
 									aria-controls="distance-travel-study-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Distance to place of study<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2549,9 +2553,9 @@
 									aria-expanded="false"
 									aria-controls="address-1yr-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Address one year ago<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2588,9 +2592,9 @@
 									aria-expanded="false"
 									aria-controls="year-arr-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%">
+									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
 										Year of arrival to live in NI<span
-											style="color: gray; font-size: 14pt;"
+											style="color: #6E6E6E; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2678,14 +2682,14 @@
 		color: darkgreen;
 	}
 	.increase::before {
-		content: "▲";
+		content: "▲" / "Increase of";
 		color: darkgreen;
 	}
 	.decrease {
 		color: darkred;
 	}
 	.decrease::before {
-		content: "▼";
+		content: "▼" / "Decrease of";
 		color: darkred;
 	}
 	.nochange {
