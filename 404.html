@@ -3,26 +3,34 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta http-equiv="content-security-policy" content="">
-	<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/start-74e3bfb5.js">
-	<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/index-06ab0f50.js">
-	<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/singletons-e0a6622d.js">
-	<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/paths-1c47712a.js">
+		
+		<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/entry/start.2b1544f3.js">
+		<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/index.e39d7899.js">
+		<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/singletons.73808077.js">
+		<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/chunks/paths.9ab06fd9.js">
+		<link rel="modulepreload" href="https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/entry/app.0dbad9cb.js">
 	</head>
 	<body>
 		<div id="svelte">
-		<script type="module" data-sveltekit-hydrate="45h">
-		import { start } from "https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/start-74e3bfb5.js";
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="45h"]').parentNode,
-			paths: {"base":"/area-explorer-2021","assets":"https://explore.nisra.gov.uk/area-explorer-2021"},
-			session: {},
-			route: true,
-			spa: true,
-			trailing_slash: "always",
-			hydrate: null
-		});
-	</script></div>
+			<script>
+				{
+					__sveltekit_135qr0d = {
+						assets: "https://explore.nisra.gov.uk/area-explorer-2021",
+						base: "/area-explorer-2021",
+						env: {}
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/entry/start.2b1544f3.js"),
+						import("https://explore.nisra.gov.uk/area-explorer-2021/_app/immutable/entry/app.0dbad9cb.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 	
