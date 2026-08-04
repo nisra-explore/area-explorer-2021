@@ -41,7 +41,10 @@
 <div class="chart" style="height: {height}px;">
 	<div class="grid" {style}>
 		{#each cells as cell}
-		<div class:round style="background-color: {cell.color}"/>
+		<div
+			class:round
+			style="background-color: {cell.color}"
+		></div>
 		{/each}
 	</div>
 </div>

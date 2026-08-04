@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte"
+    import { initCookieConsent } from "$lib/cookies";
 
     export let analyticsId; // Required. Google analytics/tag manager ID
     export let analyticsProps = {}; // Optional props to describe the content
@@ -26,6 +27,14 @@
         return cookieValue.usage;
         }
         return false;
+    }
+
+    function applyConsentDecision(option) {
+      if (option === "all") {
+        setCookie("all");
+      } else {
+        setCookie("reject");
+      }
     }
 
     // Set site cookie with 'all' or 'essential' cookies
@@ -86,6 +95,12 @@
         showBanner = !hasCookiesPreferencesSet();
         usageCookies = getUsageCookieValue();
         if (usageCookies && live) initAnalytics();
+
+        initCookieConsent({
+            bannerId: 'cookie-banner',
+            gtmId: 'GTM-WKK8ZWP',
+            cookieDomain: window.location.hostname
+      });
     });
 </script>
 
@@ -113,7 +128,9 @@
             <button
               class="btn btn--full-width btn--primary btn--focus margin-right--2 font-weight-700 font-size--17 text-wrap"
               data-gtm-accept-cookies="true" type="submit"
-              on:click|preventDefault={() => setCookie('all')}>
+              on:click|preventDefault={() => {
+                applyConsentDecision("all");
+              }}>
               Accept cookies
             </button>
           </div>
@@ -121,7 +138,9 @@
             <button
               class="btn btn--full-width btn--secondary btn--focus font-weight-700 font-size--17 text-wrap"
               data-gtm-accept-cookies="true"
-              on:click|preventDefault={() => setCookie('reject')}>
+              on:click|preventDefault={() => {
+                applyConsentDecision("reject");
+              }}>
               Reject cookies
               </button>
           </div>
@@ -220,12 +239,8 @@
   .cookies-banner a{
     text-decoration:none;
   }
-  .cookies-banner p,.cookies-banner .markdown li p:nth-of-type(2),.markdown li .cookies-banner p:nth-of-type(2),.cookies-banner .section__content--markdown li p:nth-of-type(2),.section__content--markdown li .cookies-banner p:nth-of-type(2),.cookies-banner .section__content--static-markdown li p:nth-of-type(2),.section__content--static-markdown li .cookies-banner p:nth-of-type(2){
-    padding:0;
-    margin:8px 0;
-  }
-  .wrapper,.clearfix{  
-    *zoom:1;
+  .cookies-banner p {
+	  padding: 0;
   }
   .wrapper:before,.clearfix:before,.wrapper:after,.clearfix:after{
     content:"";
@@ -262,6 +277,7 @@
     border:0;
     text-align:center;
     -webkit-appearance:none;
+    appearance: none;
     transition:background-color .25s ease-out;
     text-decoration:none;
     line-height:24px;

@@ -21,8 +21,14 @@
 
 <svelte:window on:scroll={handleOnScroll} />
 
-<div class="back_to_start" on:click={goStart} class:hidden>Back to top</div>
-
+<button
+	type="button"
+	class="back_to_start"
+	on:click={goStart}
+	class:hidden
+>
+	Back to top
+</button>
 <style>
     .back_to_start {
         opacity: 1;

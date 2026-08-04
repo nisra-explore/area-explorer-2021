@@ -53,12 +53,12 @@
 	{#each data_stacked as stack, i}
 	{#if i == 0}
 	{#each stack.values as d, j}
-	<div class="bar" style:top="{100 - yScale(d[yKey])}%" style:height="{yScale(d[yKey])}%" style:left="{(j / xDomain.length) * 100}%" style:width="calc({(1 / xDomain.length) * 100}% - 2px)"/>
+	<div class="bar" style:top="{100 - yScale(d[yKey])}%" style:height="{yScale(d[yKey])}%" style:left="{(j / xDomain.length) * 100}%" style:width="calc({(1 / xDomain.length) * 100}% - 2px)"></div>
 	{/each}
 	
 	{:else}
 	{#each stack.values as d, j}
-	<div class="marker" style:top="calc(100% - {d.offset < 0 ? yScale(d[yKey] - d.offset) : yScale(d[yKey])}%)" style:height="{yScale(d.offset)}%" style:left="{(j / xDomain.length) * 100}%" style:width="{(1 / xDomain.length) * 100}%" style="border-{d.offset < 0 ? 'top' : 'bottom'}: none"/>
+	<div class="marker" style:top="calc(100% - {d.offset < 0 ? yScale(d[yKey] - d.offset) : yScale(d[yKey])}%)" style:height="{yScale(d.offset)}%" style:left="{(j / xDomain.length) * 100}%" style:width="{(1 / xDomain.length) * 100}%" style="border-{d.offset < 0 ? 'top' : 'bottom'}: none"></div>
 	{/each}
 	{/if}
 	{/each}

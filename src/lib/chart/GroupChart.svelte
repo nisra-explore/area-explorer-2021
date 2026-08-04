@@ -3,8 +3,6 @@
 	export let xKey = "perc";
 	export let yKey = "category";
 	export let zKey = "ni";
-	export let formatTick = (d) => Math.round(d);
-	export let suffix = "%";
 	export let barHeight = 20;
 	export let margin = 30;
 
@@ -59,7 +57,7 @@
 	<ul class="legend-block">
 		{#each zDomain as group, i}
 			<li>
-				<div class="legend-vis {i == 0 ? 'bar' : 'bar2'}" />
+				<div class="legend-vis {i == 0 ? 'bar' : 'bar2'}"></div>
 				<span>{group}</span>
 			</li>
 		{/each}
@@ -82,7 +80,7 @@
 				style:width="{xScale(d[xKey])}%"
 				style:top={i == 0 ? "0" : "50%"}
 				style:height={zDomain[1] ? "50%" : "100%"}
-			/>
+			></div>
 			<div
 				class="label"
 				style:left="calc({xScale(d[xKey])}% + 2px)"
@@ -90,8 +88,6 @@
 				style:height="50%"
 				bind:clientWidth={d.width}
 			>
-				<!-- {formatTick(d[xKey])}{suffix}
-				{d[xKey]} -->
 				{toPerc(d[xKey])}
 			</div>
 		{/each}
@@ -101,9 +97,6 @@
 
 
 <style>
-	.bold {
-		font-weight: bold;
-	}
 	.label-group {
 		margin: 4px 0 1px 0;
 		line-height: 1.2;

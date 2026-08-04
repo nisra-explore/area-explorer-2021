@@ -2,7 +2,15 @@
 	import { base } from "$app/paths";
 	import { goto } from "$app/navigation";
 	import { suffixer, changeClass, changeStr } from "$lib/utils";
-	import { geog_types, topics, mapStyle, mapSources, mapLayers, mapPaint, app_inputs} from "$lib/config";
+	import {
+        app_inputs,
+        geog_types,
+        topics,
+        mapStyle,
+        mapSources,
+        mapLayers,
+        mapPaint
+	} from "$lib/config";
 	import Section from "$lib/layout/Section.svelte";
 	import Em from "$lib/ui/Em.svelte";
 	import Select from "$lib/ui/Select.svelte";
@@ -15,10 +23,11 @@
 	import GroupChart from "$lib/chart/GroupChart.svelte";
 	import BarChart from "$lib/chart/BarChart.svelte";
 	import ProfileChart from "$lib/chart/ProfileChart.svelte";
-	import AnalyticsBanner from "$lib/layout/AnalyticsBanner.svelte";
 	import ScrollToTop from '$lib/ui/scroll.svelte';
 
 	export let data;
+
+	$: ({ search_data, place, ni } = data);
 
 	let w, cols;
 	let map = null;
@@ -40,13 +49,13 @@
 		let category = props[0];
 		let val = "perc";
 
-		let source = data.place.data[category][val]["2021"];
-		let sourcePrev = data.place.data[category][val]["2011"];
-		let sourceNI = data.ni.data[category][val]["2021"];
+		let source = place.data[category][val]["2021"];
+		let sourcePrev = place.data[category][val]["2011"];
+		let sourceNI = ni.data[category][val]["2021"];
 
 		let keys = topics[category].map((d) => d.category);
 		let labels = topics[category].map((d) => (d.label ? d.label : d.category));
-		let y_data = keys.map((key, i) => {
+		let data = keys.map((key, i) => {
 			if (Array.isArray(key)) {
 				return {
 					x: labels[i],
@@ -64,7 +73,7 @@
 			}
 		});
 
-		return y_data;
+		return data;
 	}
 
 	function makeDataGroupSort(data, key) {
@@ -90,16 +99,16 @@
 
 	function updateActive(place) {
 		let prev = JSON.parse(JSON.stringify(active));
-		let code = data.place.code;
-		let type = data.place.type;
-		let children = data.place.children[0]
-			? data.place.children.map((d) => d.code)
+		let code = place.code;
+		let type = place.type;
+		let children = place.children[0]
+			? place.children.map((d) => d.code)
 			: [];
 		let childType =
-			data.place.type == "rgn"
+			place.type == "rgn"
 				? "cty"
 				: children[0]
-				? data.place.children[0].type
+				? place.children[0].type
 				: null;
 
 		active.selected = code;
@@ -128,7 +137,7 @@
 					"visibility",
 					visibility
 				);
-				if (data.place.parents[0]) {
+				if (place.parents[0]) {
 					map.setLayoutProperty(
 						key + "-self",
 						"visibility",
@@ -139,7 +148,7 @@
 			});
 
 			// Set new paint properties
-			if (data.place.parents[0]) {
+			if (place.parents[0]) {
 				fillProps.forEach((prop) =>
 					map.setPaintProperty(
 						type + "-fill",
@@ -183,15 +192,15 @@
 
 	function update(place) {
 		updateActive(place);
-		fitMap(data.place.bounds);
+		fitMap(place.bounds);
 	}
 
 	function mapSelect(ev) {
-		goto(`${base}/${ev.detail.code}/`, { noScroll: true, keepFocus: true });
+		goto(`${base}/${ev.detail.code}/`, { noscroll: true });
 	}
 
 	function menuSelect(ev) {
-		goto(`${base}/${ev.detail.value}/`, { noScroll: true, keepFocus: true });
+		goto(`${base}/${ev.detail.value}/`, { noscroll: true });
 	}
 
 	function onResize() {
@@ -207,120 +216,136 @@
 	$: w && onResize();
 	$: chartLabel = comp_2011
 		? "Same area 2011"
-		: data.place && data.place.parents[0]
+		: place && place.parents[0]
 		? "NI 2021"
 		: null;
 	
-	$: topics_available = data.place.type != "ni" && data.place.type != "lgd"
-		? false
-		: true;	
+	$: topics_available =
+        place && (place.type === "ni" || place.type === "lgd");
 	
 	$: chart_compare_type = comp_none
 		? null
 		: comp_2011 && topics_available
 		? "prev"
-		: !comp_2011 && data.place.type != "ni"
+		: !comp_2011 && place.type != "ni"
 		? "ni"
 		: null;
 
 
-	$: data.place && update(data.place);
+	$: place && update(place);
 	$: comp_ni = false;
 	$: comp_none = true;
 
 
 	$: topic_prev_available = true;
 
-	function changeAria () {
-	card.ariaHidden = !row.ariaExpanded;
-}
-
 </script>
 
 <svelte:head>
-	<title>{data.place.name} Census Data</title>
-	<meta name="description" content="" />
-	<meta property="og:title" content="{data.place.name} Census Data" />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="{app_inputs.base}/{data.place.code}/" />
-	<meta
-		property="og:description"
-		content="Explore census data for {data.place.name}."
-	/>
-	<meta name="description" content="Explore census data for {data.place.name}." />
+        <title>{place ? `${place.name} Census Data` : "Census Data"}</title>
+        <meta name="description" content="" />
+        <meta
+                property="og:title"
+                content={place ? `${place.name} Census Data` : "Census Data"}
+        />
+        <meta property="og:type" content="website" />
+        <meta
+                property="og:url"
+                content={place ? `${app_inputs.base}/${place.code}/` : app_inputs.base}
+        />
+        <meta
+                property="og:description"
+                content={place ? `Explore census data for ${place.name}.` : "Explore census data."}
+        />
+        <meta
+                name="description"
+                content={place ? `Explore census data for ${place.name}.` : "Explore census data."}
+        />
 </svelte:head>
 <ScrollToTop />
 <Section column="wide">
 
-	{#if data.place && data.ni}
+	{#if place && ni}
 
 		<div class="grid mtl">
 			<div>
 				<span class="text-small">
-					<a href="{base}/" data-sveltekit-noscroll data-sveltekit-keepfocus>Home</a
+					<a href="{base}/" data-sveltekit-noscroll>Home</a
 					>{@html " &gt; "}
-					{#if data.place.parents[0]}
-						{#each [...data.place.parents].reverse() as parent, i}
-							<a href="{base}/{parent.code}/" data-sveltekit-noscroll data-sveltekit-keepfocus
+					{#if place.parents[0]}
+						{#each [...place.parents].reverse() as parent, i}
+							<a href="{base}/{parent.code}/" data-sveltekit-noscroll
 								>{parent.name}</a
 							>{@html " &gt; "}
 						{/each}
 
-						{data.place.name}
+						{place.name}
 					{:else}
-						{data.place.name}
+						{place.name}
 					{/if}
 				</span><br />
-				<span class="text-big title">{data.place.name}</span>
+				<span class="text-big title">{place.name}</span>
 				<div class="text-bold" style="font-size: 0.85em;">
 					Click for: 
 		
-					{#if data.place.type == "ni"}
+					{#if place.type == "ni"}
 					<button
 						class="btn"
 						class:btn-active={!comp_2011}
-						on:click={() => (comp_none = true)}
-						on:click={() => (comp_2011 = false)}
-						on:click={() => (comp_ni = false)}
+						onclick={() => {
+							comp_none = true;
+							comp_2011 = false;
+							comp_ni = false;
+						}}
 						>No comparison</button
 					>
 					{:else}
 					<button
 						class="btn"
 						class:btn-active={comp_none}
-						on:click={() => (comp_none = true)}
-						on:click={() => (comp_2011 = false)}
-						on:click={() => (comp_ni = false)}
+						onclick={() => {
+							comp_none = true;
+							comp_2011 = false;
+							comp_ni = false;
+						}}
 						>No comparison</button
 					>
 					{/if}
-					{#if data.place.type != "ni"}
+					{#if place.type != "ni"}
 						<button
 							class="btn"
 							class:btn-active={comp_ni &
 								!comp_none &
 								!comp_2011}
-							on:click={() => (comp_ni = true)}
-							on:click={() => (comp_none = false)}
-							on:click={() => (comp_2011 = false)}
+							onclick={() => {
+								comp_none = false;
+								comp_2011 = false;
+								comp_ni = true;
+							}}
 							>NI 2021</button>
 					{/if}
 					
 						{#if topics_available}
 						<button
 						class="btn"
-						class:btn-active={comp_2011 & !comp_none & !comp_ni}
-						on:click={() => (comp_2011 = true)}
-						on:click={() => (comp_none = false)}
-						on:click={() => (comp_ni = false)}
-						>Same area 2011</button>
+						class:btn-active={comp_2011 && !comp_none && !comp_ni}
+						onclick={() => {
+							comp_none = false;
+							comp_2011 = true;
+							comp_ni = false;
+						}}
+						>
+							Same area 2011
+						</button>
 						{:else}
 						<button
 						class="btn"
 						class:btn-active={comp_2011 & !comp_none & !comp_ni}
-						on:click={() => (comp_2011 = false)}
-						on:click={() => (comp_none = true)}
-						on:click={() => (comp_ni = false)}
+						onclick={() => {
+							comp_none = true;
+							comp_2011 = false;
+							comp_ni = false;
+						}}
 						>2011 data not available</button>
 						{/if}
 						
@@ -335,7 +360,7 @@
 				>
 					<b>Search for your area:</b>
 					<Select
-						search_data = {data.search_data}
+						{search_data}
 						group="typestr"
 						search={true}
 						on:select={menuSelect}
@@ -393,14 +418,16 @@
 							class="btn"
 							style="width: 33%"
 							title="Click to print this page to pdf or printer"
-							onclick="window.print();return false;"
+							onclick={() => window.print()}
 							>Print / PDF </button>
 						<button
 							class="btn"
 							style="width: 33%"
-							alt="Return to the landing page"
-							onclick="window.location.href='{base}/';"
-							>Menu </button>
+							title="Return to the landing page"
+							onclick={() => goto(`${base}/`)}
+						>
+							Menu
+						</button>
 						<button
 							class="btn"
 							style="width: 30%"
@@ -415,44 +442,44 @@
 			<div class="div-grey-box" style="line-height: 1.3;">
 				<h3 style="margin: 0 0 10px 0; line-height: 1.78;">Overview</h3>
 
-				{#if data.place.type == "ni" || data.place.type == "ctry"}
+				{#if place.type == "ni" || place.type == "ctry"}
 
-					The population of {data.place.name} was {data.place.data.population.value[
+					The population of {place.name} was {place.data.population.value[
 						"2021"
 					].all.toLocaleString()} at the time of the 2021 Census.
 				{:else}
-					The population of {data.place.name} was {data.place.data.population.value[
+					The population of {place.name} was {place.data.population.value[
 						"2021"
 					].all.toLocaleString()} at the time of the 2021 Census, which
 					made it the
-					{#if data.place.data.population.value_rank["2021"].all == 1}
-						largest {geog_types[data.place.type].name}.
-					{:else if data.place.data.population.value_rank["2021"].all == data.place.count}
-						smallest {geog_types[data.place.type].name}.
-					{:else if data.place.data.population.value_rank["2021"].all <= (data.place.count + 1) / 2 && data.place.data.population.value_rank["2021"].all != 1}
-						{data.place.data.population.value_rank[
+					{#if place.data.population.value_rank["2021"].all == 1}
+						largest {geog_types[place.type].name}.
+					{:else if place.data.population.value_rank["2021"].all == place.count}
+						smallest {geog_types[place.type].name}.
+					{:else if place.data.population.value_rank["2021"].all <= (place.count + 1) / 2 && place.data.population.value_rank["2021"].all != 1}
+						{place.data.population.value_rank[
 							"2021"
 						].all.toLocaleString()}{suffixer(
-							data.place.data.population.value_rank["2021"].all
-						)} largest {geog_types[data.place.type].name}.
+							place.data.population.value_rank["2021"].all
+						)} largest {geog_types[place.type].name}.
 					{:else}
-					{(data.place.count + 1 - data.place.data.population.value_rank["2021"].all).toLocaleString()}{suffixer(
-						data.place.count + 1 - data.place.data.population.value_rank["2021"].all
-						)} smallest {geog_types[data.place.type].name}.
+					{(place.count + 1 - place.data.population.value_rank["2021"].all).toLocaleString()}{suffixer(
+						place.count + 1 - place.data.population.value_rank["2021"].all
+						)} smallest {geog_types[place.type].name}.
 					{/if}
 				{/if}
 				{#if topics_available}
-				{#if data.place.data.population.value.change.all == 0}
+				{#if place.data.population.value.change.all == 0}
 					No change in population since the 2011 Census.
-				{:else if data.place.data.population.value.change.all > 0}
+				{:else if place.data.population.value.change.all > 0}
 					An increase of {changeStr(
-						data.place.data.population.value.change.all,
+						place.data.population.value.change.all,
 						"%",
 						1
 					)} since the 2011 Census.
 				{:else}
 					A decrease of {changeStr(
-						data.place.data.population.value.change.all,
+						place.data.population.value.change.all,
 						"%",
 						1
 					)} since the 2011 Census.
@@ -468,8 +495,8 @@
 					aria-expanded="false"
 					aria-controls="pop-info"
 				>
-					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-						Population <span style="color: #6E6E6E; font-size: 14pt;"
+					<div class="blocktitle" style="margin: 0; width: 100%">
+						Population <span style="color: gray; font-size: 14pt;"
 							>{@html " &#x24D8; "}
 						</span>
 					</div>
@@ -488,37 +515,37 @@
 					</div>
 				</div>
 				<span class="text-big" style="font-size: 2.8em;"
-					>{data.place.data.population.value[
+					>{place.data.population.value[
 						"2021"
 					].all.toLocaleString()}</span
 				><br />
-				{#if data.place.type != "ni"}
-					{#if (data.place.type != "ctry") & comp_ni & !comp_2011}
+				{#if place.type != "ni"}
+					{#if (place.type != "ctry") & comp_ni & !comp_2011}
 						<span class="text-small "
 							><Em
-								>{data.place.data.population.value["2021"].all /
-									data.ni.data.population.value["2021"].all >=
+								>{place.data.population.value["2021"].all /
+									ni.data.population.value["2021"].all >=
 								0.001
 									? (
-											(data.place.data.population.value["2021"] .all / data.ni.data.population.value["2021"] 	.all) *
+											(place.data.population.value["2021"] .all / ni.data.population.value["2021"] 	.all) *
 											100
 									  ).toFixed(1)
 									: "<0.1"}%</Em
 							> of Northern Ireland population</span
 						>
 						<div class="text-small ">
-							{#if data.place.type == "lgd"}
-							{#if data.place.data.population.value_rank["2021"].all == 1}
+							{#if place.type == "lgd"}
+							{#if place.data.population.value_rank["2021"].all == 1}
 								The largest
-							{:else if data.place.data.population.value_rank["2021"].all == data.place.count}
+							{:else if place.data.population.value_rank["2021"].all == place.count}
 								The smallest
-							{:else if data.place.data.population.value_rank["2021"].all <= (data.place.count + 1) / 2 && data.place.data.population.value_rank["2021"].all != 1}
-								{data.place.data.population.value_rank["2021"].all.toLocaleString()}{suffixer(data.place.data.population.value_rank["2021"].all)} largest
+							{:else if place.data.population.value_rank["2021"].all <= (place.count + 1) / 2 && place.data.population.value_rank["2021"].all != 1}
+								{place.data.population.value_rank["2021"].all.toLocaleString()}{suffixer(place.data.population.value_rank["2021"].all)} largest
 							{:else}
-								{(data.place.count + 1 - data.place.data.population.value_rank["2021"].all).toLocaleString()}{suffixer(data.place.count + 1 - data.place.data.population.value_rank["2021"].all)} smallest
+								{(place.count + 1 - place.data.population.value_rank["2021"].all).toLocaleString()}{suffixer(place.count + 1 - place.data.population.value_rank["2021"].all)} smallest
 							{/if}
-							population of {data.place.count.toLocaleString()}
-							{geog_types[data.place.type].pl} 	
+							population of {place.count.toLocaleString()}
+							{geog_types[place.type].pl} 	
 							{/if} 							
 
 						</div>
@@ -528,8 +555,8 @@
 					<span class="text-small "
 						><Em
 							><span
-								class={changeClass(data.place.data.population.value.change.all)}
-								>{changeStr(data.place.data.population.value.change.all,"%",1)}</span
+								class={changeClass(place.data.population.value.change.all)}
+								>{changeStr(place.data.population.value.change.all,"%",1)}</span
 							></Em
 						> since 2011 Census</span
 					>
@@ -544,8 +571,8 @@
 					aria-expanded="false"
 					aria-controls="households-info"
 				>
-					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-						Households<span style="color: #6E6E6E; font-size: 14pt;"
+					<div class="blocktitle" style="margin: 0; width: 100%">
+						Households<span style="color: gray; font-size: 14pt;"
 							>{@html " &#x24D8; "}</span
 						>
 					</div>
@@ -562,22 +589,22 @@
 					</div>
 				</div>
 				<span class="text-big" style="font-size: 2.8em;"
-					>{data.place.data.households.value[
+					>{place.data.households.value[
 						"2021"
 					].all_households.toLocaleString()}</span
 				><br />
-				{#if (data.place.type != "ni") & comp_ni}
+				{#if (place.type != "ni") & comp_ni}
 					<span class="text-small"
 						><Em
-							>{data.place.data.households.value["2021"]
+							>{place.data.households.value["2021"]
 								.all_households /
-								data.ni.data.households.value["2021"]
+								ni.data.households.value["2021"]
 									.all_households >=
 							0.001
 								? (
-										(data.place.data.households.value["2021"]
+										(place.data.households.value["2021"]
 											.all_households /
-											data.ni.data.households.value["2021"] .all_households) *
+											ni.data.households.value["2021"] .all_households) *
 										100
 								  ).toFixed(1)
 								: "<0.1"}%</Em
@@ -589,11 +616,11 @@
 						><Em
 							><span
 								class={changeClass(
-									data.place.data.households.value.change
+									place.data.households.value.change
 										.all_households
 								)}
 								>{changeStr(
-									data.place.data.households.value.change
+									place.data.households.value.change
 										.all_households,
 									"%",
 									1
@@ -609,28 +636,25 @@
 				</div>
 				<!-- a19e9e -->
 		<div class="grid mt" bind:clientWidth={w}>
-			<div style="grid-column: span {cols};">
+			<div style="grid-column: 1 / -1;">
 				<h3>
-					<!-- Explore <span style="color: #93328E">{data.place.name}</span> -->
-					{#if data.place.type != "ni"}
-					Explore <span style="color: #93328E">{data.place.name}</span> 
-					<span style="color: #6E6E6E">- {geog_types[data.place.type].name}</span>
+					<!-- Explore <span style="color: #93328E">{place.name}</span> -->
+					{#if place.type != "ni"}
+					Explore <span style="color: #93328E">{place.name}</span> 
+					<span style="color: #a19e9e">- {geog_types[place.type].name}</span>
 					{:else} 
-					Explore <span style="color: #93328E">{data.place.name}</span>
+					Explore <span style="color: #93328E">{place.name}</span>
 					{/if}
 
 				</h3>
 			</div>
-			<div
+		<div
 				id="map"
-				style="padding-right: 45px; grid-column: span {cols == 2
-					? 2
-					: cols && cols > 2
-					? cols - 1
-					: 1};  ">
+				style="padding-right: 45px; grid-column: 1 / span 2;"
+			>
 				<Map
 					bind:map
-					location={{ bounds: data.place.bounds }}
+					location={{ bounds: place.bounds }}
 					options={{ fitBoundsOptions: { padding: 20 } }}
 					style={mapStyle}
 				>
@@ -701,9 +725,9 @@
 <!-- OPTION 1 a list of LGDs - probably only suitable for LGD data only -->
 <!-- 			<div>
 				<span>
-					{#if data.place.parents[0]}
-						{#each [...data.place.parents].reverse() as parent, i}
-							<span>{data.place.name} is located in </span><span
+					{#if place.parents[0]}
+						{#each [...place.parents].reverse() as parent, i}
+							<span>{place.name} is located in </span><span
 								class="text-bold"
 								><a
 									href="{base}/{parent.code}/"
@@ -733,7 +757,7 @@
 							{/each}
 						{:else}
 							<span class="muted"
-								>No areas within {data.place.name}</span
+								>No areas within {place.name}</span
 							>
 						{/if}
 					</ul></span
@@ -741,27 +765,27 @@
 			</div> -->
 <!-- OPTION 2 like original app navigation to RHS of map -->
  			<div>
-				{#if data.place.parents[0]}
-				<span class="text-bold">Parents of {data.place.name} </span><br/>
+				{#if place.parents[0]}
+				<span class="text-bold">Parents of {place.name} </span><br/>
 				<span class="text-small">
-				{#each [...data.place.parents].reverse() as parent, i}
-				<span style="display: block; margin-left: {i > 0 ? (i - 1) * 15 : 0}px">{@html i > 0 ? '↳ ' : ''}<a href="{base}/{parent.code}" data-sveltekit-noscroll data-sveltekit-keepfocus>{parent.name}</a></span>
+				{#each [...place.parents].reverse() as parent, i}
+				<span style="display: block; margin-left: {i > 0 ? (i - 1) * 15 : 0}px">{@html i > 0 ? '↳ ' : ''}<a href="{base}/{parent.code}" data-sveltekit-noscroll>{parent.name}</a></span>
 				{/each}
 			</span>
 			{:else}
-	<!-- 			<span class="muted">No parents for {data.place.name}</span>
+	<!-- 			<span class="muted">No parents for {place.name}</span>
  -->				{/if}
 			</div>
 			<div>
-				{#if data.place.children[0]}
-				<span class="text-bold">{data.place.children[0] ? geog_types[data.place.children[0].type].pl : 'Areas'} within {data.place.name}</span><br/>
+				{#if place.children[0]}
+				<span class="text-bold">{place.children[0] ? geog_types[place.children[0].type].pl : 'Areas'} within {place.name}</span><br/>
 				<span class="text-small">
-				{#each data.place.children as child, i}
-				<a href="{base}/{child.code}" data-sveltekit-noscroll data-sveltekit-keepfocus>{child.name}</a>{ i < data.place.children.length - 1 ? ', ' : ''}
+				{#each place.children as child, i}
+				<a href="{base}/{child.code}" data-sveltekit-noscroll>{child.name}</a>{ i < place.children.length - 1 ? ', ' : ''}
 				{/each}
 			</span>
 			{:else}
-				<span class="muted">No areas below {data.place.name} {geog_types[data.place.type].name}</span>
+				<span class="muted">No areas below {place.name} {geog_types[place.type].name}</span>
 				{/if}
 			</div>
 			
@@ -781,7 +805,7 @@
 				</h2>
 				<div id="panelsStayOpen-collapseZero" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingZero">
 				  <div class="accordion-body">
-					  Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Location, Area and Population density</span>
+					  Census 2021 - {place.name} - <span class="accordion-button-title-sub">Location, Area and Population density</span>
 	
 					  <div class="grid mt" bind:clientWidth={w}>
 						  
@@ -795,8 +819,8 @@
 								aria-expanded="false"
 								aria-controls="location-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-									Location<span style="color: #6E6E6E; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%">
+									Location<span style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -806,22 +830,22 @@
 									Information about the area including its geographical hierarchy.
 								</div>
 							</div>
-							<br>{#if data.place.type != "ni" & data.place.type !="lgd"}
-									{data.place.name} is one of {data.place.count.toLocaleString()} {geog_types[data.place.type].pl}.  
-									It is located within {data.place.parents[0].name} {geog_types[data.place.parents[0].type].name}.
+							<br>{#if place.type != "ni" & place.type !="lgd"}
+									{place.name} is one of {place.count.toLocaleString()} {geog_types[place.type].pl}.  
+									It is located within {place.parents[0].name} {geog_types[place.parents[0].type].name}.
 										
-								{:else if data.place.type != "ni" & data.place.type =="lgd"}
-								{data.place.name} is one of {data.place.count.toLocaleString()} {geog_types[data.place.type].pl}.
-								 It is located within {data.place.parents[0].name}.  
+								{:else if place.type != "ni" & place.type =="lgd"}
+								{place.name} is one of {place.count.toLocaleString()} {geog_types[place.type].pl}.
+								 It is located within {place.parents[0].name}.  
 								
-							 <!--and is {(data.place.hectares.toLocaleString())} hectares in size--> <!--
-							{#if data.place.type != "lgd"}
-							It has {data.place.data.population.value_rank["2021"].all > data.place.count * 0.333 && data.place.data.population.value_rank["2021"].all < data.place.count * 0.667 ? "an average size "
-							 : data.place.data.population.value_rank["2021"].all < data.place.count * 0.333 ? "a large "
-								: "a small "}  {geog_types[data.place.type].name} population.
+							 <!--and is {(place.hectares.toLocaleString())} hectares in size--> <!--
+							{#if place.type != "lgd"}
+							It has {place.data.population.value_rank["2021"].all > place.count * 0.333 && place.data.population.value_rank["2021"].all < place.count * 0.667 ? "an average size "
+							 : place.data.population.value_rank["2021"].all < place.count * 0.333 ? "a large "
+								: "a small "}  {geog_types[place.type].name} population.
 							{/if}-->
 							{:else}
-							{data.place.name} contains 11 Local Goverment Districts, 80 District Electoral Areas, 850 Super Data Zones and 3780 Data Zones.
+							{place.name} contains 11 Local Goverment Districts, 80 District Electoral Areas, 850 Super Data Zones and 3780 Data Zones.
 			
 							{/if}
 						</div>
@@ -834,8 +858,8 @@
 								aria-expanded="false"
 								aria-controls="Area-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-									Area <span style="color: #6E6E6E; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%">
+									Area <span style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -846,8 +870,9 @@
 								</div>
 							</div>
 							<span class="text-big" style="font-size: 2.8em;"
-							>{ data.place.hectares >= 0.1? ( data.place.hectares).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+							>{ place.hectares >= 0.1? ( place.hectares).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
 								: "<0.1"} ha
+							</span>
 
 						</div>
 						<div class="div-grey-box">
@@ -858,8 +883,8 @@
 								data-bs-target="#popden-info"
 								aria-expanded="false"
 								aria-controls="popden-info">
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-									Population density<span style="color: #6E6E6E; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%">
+									Population density<span style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -870,18 +895,18 @@
 								</div>
 							</div>
 							<span class="text-big" style="font-size: 2.8em;"
-							>{data.place.data.population.value["2021"].all / data.place.hectares >= 0.1
-								? ((data.place.data.population.value["2021"].all / data.place.hectares)).toFixed(1) 
+							>{place.data.population.value["2021"].all / place.hectares >= 0.1
+								? ((place.data.population.value["2021"].all / place.hectares)).toFixed(1) 
 								: "<0.1"}
 							</span>
-							{#if data.place.type != "ni" && comp_ni}
+							{#if place.type != "ni" && comp_ni}
 							<br>
-							<span class="text-small">{data.place.data.population.value["2021"].all / data.place.hectares > data.ni.data.population.value["2021"].all / data.ni.hectares * 1.1
+							<span class="text-small">{place.data.population.value["2021"].all / place.hectares > ni.data.population.value["2021"].all / ni.hectares * 1.1
 								? "Higher than Northern Ireland value of "
-								: data.place.data.population.value["2021"].all / data.place.hectares < data.ni.data.population.value["2021"].all / data.ni.hectares * 0.9 
+								: place.data.population.value["2021"].all / place.hectares < ni.data.population.value["2021"].all / ni.hectares * 0.9 
 								? "Lower than Northern Ireland value of "
 								: "Similar to the Northern Ireland value of "}
-							{((data.ni.data.population.value["2021"].all / data.ni.hectares)).toFixed(1)} persons per hectare</span>
+							{((ni.data.population.value["2021"].all / ni.hectares)).toFixed(1)} persons per hectare</span>
 							{/if}
 							</div>
 					  </div>
@@ -901,7 +926,7 @@
 			  </h2>
 			  <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
 				<div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Broad age bands (years), Sex, Household size</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Broad age bands (years), Sex, Household size</span>
 
 				
 					<div class="grid mt" bind:clientWidth={w}>
@@ -914,9 +939,9 @@
 								aria-expanded="false"
 								aria-controls="broadagebands-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Broad age bands (years) <span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -936,7 +961,7 @@
 								style="height: 100px; padding-bottom: 5px"
 							>
 								<ColChart
-									data={data.place && makeData(["age"])}
+									data={place && makeData(["age"])}
 									zKey={chart_compare_type}/>
 									<!-- wKey="{topics_available}" -->
 								
@@ -959,30 +984,30 @@
 								</div>
 							{/if}
 							<div><Legend_ColChart 
-							data = {data.place && makeData(["age"])} 
+							data = {place && makeData(["age"])} 
 							zKey = {chart_compare_type}/>
 							<!-- wKey="{topics_available}"  -->
 						    </div>
 				</div>
 						<div class = "div-grey-box">
-				<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Sex </div>
+				<div class="blocktitle" style="margin: 0; width: 100%">Sex </div>
 
-				<StackedBarChart data="{data.place && makeData(['sex'])}" zKey="{chart_compare_type}" label={chartLabel}/>
+				<StackedBarChart data="{place && makeData(['sex'])}" zKey="{chart_compare_type}" label={chartLabel}/>
 				<!-- wKey="{topics_available}" -->
 <!-- 				<br>
-				{#if comp_none || (comp_ni && data.place.type == "ni")}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.sex,"sex")} zKey="group"	label={chartLabel}/>
+				{#if comp_none || (comp_ni && place.type == "ni")}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.sex,"sex")} zKey="group"	label={chartLabel}/>
 				{:else if comp_2011}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.sex,"sex")} zKey="group"	label={chartLabel}/>
-				{:else if comp_ni && data.place.type != "ni"}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.sex,"sex")} zKey="group"	label={chartLabel}/>
+					<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.sex,"sex")} zKey="group"	label={chartLabel}/>
+				{:else if comp_ni && place.type != "ni"}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.sex,"sex")} zKey="group"	label={chartLabel}/>
 				{/if}
  -->
 			</div>
 			
 			 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#hhsize-info" aria-expanded="false" aria-controls="hhsize-info">
-					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Household size<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%">Household size<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="hhsize-info">
 					<div class="card card-body">
@@ -990,17 +1015,17 @@
 					</div>
 				</div>
 
-				<StackedBarChart data="{data.place && makeData(['hh_size'])}" 
+				<StackedBarChart data="{place && makeData(['hh_size'])}" 
 				zKey="{chart_compare_type}"
 				label={chartLabel}/>
 				<!-- wKey="{topics_available}"  -->
 <!-- 				<br>
-				{#if comp_none || (comp_ni && data.place.type == "ni")}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
+				{#if comp_none || (comp_ni && place.type == "ni")}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
 				{:else if comp_2011}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
-				{:else if comp_ni && data.place.type != "ni"}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
+					<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
+				{:else if comp_ni && place.type != "ni"}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.hh_size,"hh_size")} zKey="group"	label={chartLabel}/>
 				{/if}
  -->
 			</div> 
@@ -1025,7 +1050,7 @@
 			  </h2>
 			  <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
 				<div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Country of birth, Passport(s) held, National identity (person based)</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Country of birth, Passport(s) held, National identity (person based)</span>
 
 					<div class="grid mt" bind:clientWidth={w}>
 						<div class="div-grey-box">
@@ -1037,9 +1062,9 @@
 								aria-expanded="false"
 								aria-controls="cob-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Country of birth<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1054,17 +1079,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["cob"])}
+								data={place && makeData(["cob"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.cob,"cob")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.cob,"cob")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.cob,"cob")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.cob,"cob")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.cob,"cob")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.cob,"cob")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 							</div>
 						<div class="div-grey-box">
@@ -1076,9 +1101,9 @@
 								aria-expanded="false"
 								aria-controls="passport-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Passport(s) held<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1092,17 +1117,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["passport"])}
+								data={place && makeData(["passport"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/><!-- 
 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.passport,"passport")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.passport,"passport")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.passport,"passport")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.passport,"passport")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.passport,"passport")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.passport,"passport")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1116,10 +1141,10 @@
 							>
 								<div
 									class="blocktitle"
-									style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
+									style="font-size: 1.02em; margin: 0; width: 100%"
 								>
 									National identity (person based)<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1134,17 +1159,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["natid"])}
+								data={place && makeData(["natid"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.natid,"natid")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.natid,"natid")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.natid,"natid")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.natid,"natid")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.natid,"natid")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.natid,"natid")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 					</div>
@@ -1161,7 +1186,7 @@
 			  </h2>
 			  <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
 				<div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Main language, Knowledge of Irish, Knowledge of Ulster-Scots</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Main language, Knowledge of Irish, Knowledge of Ulster-Scots</span>
 
 
 					<div class="grid mt" bind:clientWidth={w}>
@@ -1174,9 +1199,9 @@
 								aria-expanded="false"
 								aria-controls="mainlang-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Main language<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1192,17 +1217,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["mainlang"])}
+								data={place && makeData(["mainlang"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.mainlang,"mainlang")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1214,9 +1239,9 @@
 								aria-expanded="false"
 								aria-controls="irish-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Knowledge of Irish<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1233,17 +1258,17 @@
 								</div>
 							</div>
 							<StackedBarChart 
-								data={data.place && makeData(["irish"])}
+								data={place && makeData(["irish"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.irish,"irish")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.irish,"irish")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.irish,"irish")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.irish,"irish")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.irish,"irish")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.irish,"irish")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1255,9 +1280,9 @@
 								aria-expanded="false"
 								aria-controls="ulster-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Knowledge of Ulster-Scots<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1274,17 +1299,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["ulster"])}
+								data={place && makeData(["ulster"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.ulster,"ulster")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 					</div>
@@ -1303,7 +1328,7 @@
 				</h2>
 				<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
 				  <div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Religion, Religion or religion brought up in, Ethnic group</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Religion, Religion or religion brought up in, Ethnic group</span>
   
 
 					<div class="grid mt" bind:clientWidth={w}>
@@ -1316,8 +1341,8 @@
 								aria-expanded="false"
 								aria-controls="rel-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
-									Religion<span style="color: #6E6E6E; font-size: 14pt;"
+								<div class="blocktitle" style="margin: 0; width: 100%">
+									Religion<span style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1332,36 +1357,36 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["religion"])}
+								data={place && makeData(["religion"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.religion,"religion")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.religion,"religion")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.religion,"religion")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.religion,"religion")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.religion,"religion")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.religion,"religion")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						 <div class = "div-grey-box">
 				<div class="row" style="display: flex; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#relbup-info" aria-expanded="false" aria-controls="relbup-info">
-					<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>Religion or religion brought up in<span style="color: #6E6E6E; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
+					<div class="blocktitle" style="margin: 0; width: 100%">Religion or religion brought up in<span style="color: gray; font-size: 14pt;">{@html ' &#x24D8; '}</span></div>
 				</div>
 				<div class="collapse" id="relbup-info">
 					<div class="card card-body">
 						The religious group the person belongs to or for people with no current religion their religious group of upbringing. People with no current religion and no religion of upbringing are labelled 'None'.    <a href="https://www.nisra.gov.uk/publications/census-2021-statistical-bulletins"><strong>Statistical bulletins</strong></a>
 					</div>
 				</div>
-				<StackedBarChart data="{data.place && makeData(['religion_or_religion_brought_up_in'])}" zKey="{chart_compare_type}" label={chartLabel}/>
+				<StackedBarChart data="{place && makeData(['religion_or_religion_brought_up_in'])}" zKey="{chart_compare_type}" label={chartLabel}/>
 <!-- 				<br>
-				{#if comp_none || (comp_ni && data.place.type == "ni")}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
+				{#if comp_none || (comp_ni && place.type == "ni")}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
 				{:else if comp_2011}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
-				{:else if comp_ni && data.place.type != "ni"}
-					<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
+					<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
+				{:else if comp_ni && place.type != "ni"}
+					<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.religion_or_religion_brought_up_in,"religion_or_religion_brought_up_in")} zKey="group"	label={chartLabel}/>
 				{/if} -->
 					</div>
 						 <div class="div-grey-box">
@@ -1373,9 +1398,9 @@
 								aria-expanded="false"
 								aria-controls="ethnic-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Ethnic group<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1389,17 +1414,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["ethnic"])}
+								data={place && makeData(["ethnic"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 						<!--	<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.ethnic,"ethnic")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 						</div>
 					</div>
@@ -1416,7 +1441,7 @@
 				</h2>
 				<div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFive">
 				  <div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">General health, Long-term health problem or disability, Long-term health conditions, Unpaid care</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">General health, Long-term health problem or disability, Long-term health conditions, Unpaid care</span>
   
 					<div class="grid mt" bind:clientWidth={w}>
 								<div class="div-grey-box">
@@ -1430,10 +1455,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="margin: 0; width: 100%" on:click={changeAria}
+											style="margin: 0; width: 100%"
 										>
 											General health<span
-												style="color: #6E6E6E; font-size: 14pt;"
+												style="color: gray; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1450,18 +1475,18 @@
 										</div>
 									</div>
 									<StackedBarChart
-										data={data.place &&
+										data={place &&
 											makeData(["general_health"])}
 										zKey={chart_compare_type}
 										label={chartLabel}
 									/>
 <!-- 									<br>
-									{#if comp_none || (comp_ni && data.place.type == "ni")}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
+									{#if comp_none || (comp_ni && place.type == "ni")}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
 									{:else if comp_2011}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
-									{:else if comp_ni && data.place.type != "ni"}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
+										<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
+									{:else if comp_ni && place.type != "ni"}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.general_health,"general_health")} zKey="group"	label={chartLabel}/>
 									{/if} -->
 													</div>
 								<div class="div-grey-box">
@@ -1475,10 +1500,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 0.87em; margin: 0; width: 100%" on:click={changeAria}
+											style="font-size: 0.87em; margin: 0; width: 100%"
 										>
 											Long-term health problem or disability<span
-												style="color: #6E6E6E; font-size: 14pt;"
+												style="color: gray; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1492,7 +1517,7 @@
 										</div>
 									</div>
  									<StackedBarChart
-										data={data.place &&
+										data={place &&
 											makeData([
 												"long_term_disability"
 											])}
@@ -1500,12 +1525,12 @@
 										label={chartLabel}
 									/>
 									<!-- <br> 
-									{#if comp_none || (comp_ni && data.place.type == "ni")}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
+									{#if comp_none || (comp_ni && place.type == "ni")}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
 									{:else if comp_2011}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
-									{:else if comp_ni && data.place.type != "ni"}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
+										<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
+									{:else if comp_ni && place.type != "ni"}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.long_term_disability,"long_term_disability")} zKey="group"	label={chartLabel}/>
 									{/if} -->
 													</div>
 								<div class="div-grey-box">
@@ -1519,10 +1544,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
+											style="font-size: 1.02em; margin: 0; width: 100%"
 										>
 											Long-term health conditions<span
-												style="color: #6E6E6E; font-size: 14pt;"
+												style="color: gray; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											><br>
 										</div>
@@ -1537,7 +1562,7 @@
 										</div>
 									</div>
 									<StackedBarChart
-										data={data.place &&
+										data={place &&
 											makeData([
 												"number_of_long_term_health"
 											])}
@@ -1545,12 +1570,12 @@
 										label={chartLabel}
 									/>
 <!-- 	 								<br>
-									{#if comp_none || (comp_ni && data.place.type == "ni")}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
+									{#if comp_none || (comp_ni && place.type == "ni")}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
 									{:else if comp_2011}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
-									{:else if comp_ni && data.place.type != "ni"}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
+										<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
+									{:else if comp_ni && place.type != "ni"}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.number_of_long_term_health,"number_of_long_term_health")} zKey="group"	label={chartLabel}/>
 									{/if} -->
 													</div>
 								<div class="div-grey-box">
@@ -1564,10 +1589,10 @@
 									>
 										<div
 											class="blocktitle"
-											style="font-size: 1.02em; margin: 0; width: 100%" on:click={changeAria}
+											style="font-size: 1.02em; margin: 0; width: 100%"
 										>
 											Unpaid care<span
-												style="color: #6E6E6E; font-size: 14pt;"
+												style="color: gray; font-size: 14pt;"
 												>{@html " &#x24D8; "}</span
 											>
 										</div>
@@ -1588,18 +1613,18 @@
 										</div>
 									</div>
 									<StackedBarChart
-										data={data.place &&
+										data={place &&
 											makeData(["provision_care"])}
 										zKey={chart_compare_type}
 										label={chartLabel}
 									/>
 <!-- 									<br>
-									{#if comp_none || (comp_ni && data.place.type == "ni")}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
+									{#if comp_none || (comp_ni && place.type == "ni")}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
 									{:else if comp_2011}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
-									{:else if comp_ni && data.place.type != "ni"}
-										<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
+										<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
+									{:else if comp_ni && place.type != "ni"}
+										<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.provision_care,"provision_care")} zKey="group"	label={chartLabel}/>
 									{/if} -->
 													</div>
 							</div>
@@ -1620,7 +1645,7 @@
 				</h2>
 				<div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSix">
 				  <div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Accommodation type, Household adaptations, Central heating, Renewable energy systems, Household tenure, Car or van availability</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Accommodation type, Household adaptations, Central heating, Renewable energy systems, Household tenure, Car or van availability</span>
   
 		
 					<div class="grid mt" bind:clientWidth={w}>
@@ -1633,9 +1658,9 @@
 								aria-expanded="false"
 								aria-controls="acc-type-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Accommodation type<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1648,16 +1673,16 @@
 									>
 								</div>
 							</div>
-							<StackedBarChart data={data.place && makeData(["accommodation_type"])}
+							<StackedBarChart data={place && makeData(["accommodation_type"])}
 								zKey={chart_compare_type}
 								label={chartLabel}/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1669,9 +1694,9 @@
 								aria-expanded="false"
 								aria-controls="adapt-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Household adaptations<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1686,18 +1711,18 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place &&
+								data={place &&
 									makeData(["number_of_adaptations"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.number_of_adaptations,"number_of_adaptations")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1709,9 +1734,9 @@
 								aria-expanded="false"
 								aria-controls="heat-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Central heating<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1726,18 +1751,18 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place &&
+								data={place &&
 									makeData(["central_heating"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.central_heating,"central_heating")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 						<div class="div-grey-box">
@@ -1749,9 +1774,9 @@
 								aria-expanded="false"
 								aria-controls="renew-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Renewable energy systems<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1766,21 +1791,21 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place &&
+								data={place &&
 									makeData(["renewable_energy"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 								topic_prev_available = {false}
 							/>
 
-							
-<!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
+							<br>
+<!-- 							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-							<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
+							<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
 							2011 comparison not available
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.renewable_energy,"renewable_energy")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 
 
@@ -1795,9 +1820,9 @@
 								aria-expanded="false"
 								aria-controls="tenure-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Household tenure<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1812,17 +1837,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["hh_tenure"])}
+								data={place && makeData(["hh_tenure"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
 <!-- 							<br>
-							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
+							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.hh_tenure,"hh_tenure")} zKey="group"	label={chartLabel}/>
 							{/if} -->
 									</div>
 		
@@ -1835,9 +1860,9 @@
 								aria-expanded="false"
 								aria-controls="car-info"
 							>
-								<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+								<div class="blocktitle" style="margin: 0; width: 100%">
 									Car or van availability<span
-										style="color: #6E6E6E; font-size: 14pt;"
+										style="color: gray; font-size: 14pt;"
 										>{@html " &#x24D8; "}</span
 									>
 								</div>
@@ -1855,17 +1880,17 @@
 								</div>
 							</div>
 							<StackedBarChart
-								data={data.place && makeData(["car_or_van"])}
+								data={place && makeData(["car_or_van"])}
 								zKey={chart_compare_type}
 								label={chartLabel}
 							/>
-						
-<!-- 							{#if comp_none || (comp_ni && data.place.type == "ni")}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
+							<br>
+<!-- 							{#if comp_none || (comp_ni && place.type == "ni")}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
 							{:else if comp_2011}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
-							{:else if comp_ni && data.place.type != "ni"}
-								<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
+								<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
+							{:else if comp_ni && place.type != "ni"}
+								<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.car_or_van,"car_or_van")} zKey="group"	label={chartLabel}/>
 							{/if}
  -->									</div>
 					</div>
@@ -1882,7 +1907,7 @@
 					</h2>
 					<div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingSeven">
 					  <div class="accordion-body">
-						Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Number of dependent children, Household composition</span>
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Number of dependent children, Household composition</span>
 	  
 
 						<div class="grid mt" bind:clientWidth={w}>
@@ -1896,9 +1921,9 @@
 									aria-expanded="false"
 									aria-controls="dep-child-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Number of dependent children<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1911,16 +1936,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["number_of_dependent_children_households"])}
+								<StackedBarChart data={place && makeData(["number_of_dependent_children_households"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -1935,9 +1960,9 @@
 									aria-expanded="false"
 									aria-controls="hh-comp-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Household composition<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -1951,16 +1976,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["household_composition_households"])}
+								<StackedBarChart data={place && makeData(["household_composition_households"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -1985,7 +2010,7 @@
 				</h2>
 				<div id="panelsStayOpen-collapseEight" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEight">
 				  <div class="accordion-body">
-					Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Marital and civil partnership status</span>
+					Census 2021 - {place.name} - <span class="accordion-button-title-sub">Marital and civil partnership status</span>
   
 
 					<div class="grid mt" bind:clientWidth={w}>
@@ -1999,9 +2024,9 @@
 							aria-expanded="false"
 							aria-controls="marital-info"
 						>
-							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%" on:click={changeAria}> <!-- font-size: 1.02em -->
+							<div class="blocktitle" style="font-size: 0.95em;margin: 0; width: 100%"> <!-- font-size: 1.02em -->
 								Marital and civil partnership status<span
-									style="color: #6E6E6E; font-size: 14pt;"
+									style="color: gray; font-size: 14pt;"
 									>{@html " &#x24D8; "}</span
 								>
 							</div>
@@ -2014,16 +2039,16 @@
 								>
 							</div>
 						</div>
-						<StackedBarChart data={data.place && makeData(["marital_and_civil_partnership_status"])}
+						<StackedBarChart data={place && makeData(["marital_and_civil_partnership_status"])}
 							zKey={chart_compare_type}
 							label={chartLabel}/>
 <!-- 							<br>
-						{#if comp_none || (comp_ni && data.place.type == "ni")}
-							<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+						{#if comp_none || (comp_ni && place.type == "ni")}
+							<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 						{:else if comp_2011}
-							<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-						{:else if comp_ni && data.place.type != "ni"}
-							<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+							<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+						{:else if comp_ni && place.type != "ni"}
+							<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 						{/if} -->
 								
 					</div>
@@ -2053,7 +2078,7 @@
 					</h2>
 					<div id="panelsStayOpen-collapseNine" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingNine">
 					  <div class="accordion-body">
-						Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Sexual orientation</span>
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Sexual orientation</span>
 	  
 
 						<div class="grid mt" bind:clientWidth={w}>
@@ -2067,9 +2092,9 @@
 									aria-expanded="false"
 									aria-controls="sexual-orientation-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Sexual orientation<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2082,17 +2107,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["sexual_orientation_by_broad_age_band"])}
+								<StackedBarChart data={place && makeData(["sexual_orientation_by_broad_age_band"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2122,7 +2147,7 @@
 					</h2>
 					<div id="panelsStayOpen-collapseTen" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTen">
 					  <div class="accordion-body">
-						Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Highest level of qualifications, Economic activity, Hours worked per week, Industry of employment, Occupation</span>
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Highest level of qualifications, Economic activity, Hours worked per week, Industry of employment, Occupation</span>
 	  
 
 						<div class="grid mt" bind:clientWidth={w}>
@@ -2136,9 +2161,9 @@
 									aria-expanded="false"
 									aria-controls="quals-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Highest level of qualifications<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2167,16 +2192,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["highest_level_of_qualifications"])}
+								<StackedBarChart data={place && makeData(["highest_level_of_qualifications"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2191,9 +2216,9 @@
 									aria-expanded="false"
 									aria-controls="econ-act-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Economic activity<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2206,16 +2231,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["economic_activity"])}
+								<StackedBarChart data={place && makeData(["economic_activity"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2230,9 +2255,9 @@
 									aria-expanded="false"
 									aria-controls="hours-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Hours worked per week<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2245,16 +2270,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["hours_worked"])}
+								<StackedBarChart data={place && makeData(["hours_worked"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2269,9 +2294,9 @@
 									aria-expanded="false"
 									aria-controls="industry-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Industry of employment<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2284,16 +2309,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["industry_of_employment"])}
+								<StackedBarChart data={place && makeData(["industry_of_employment"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2308,9 +2333,9 @@
 									aria-expanded="false"
 									aria-controls="occupation-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Occupation<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2323,17 +2348,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["occupation_1_digit"])}
+								<StackedBarChart data={place && makeData(["occupation_1_digit"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2352,7 +2377,7 @@
 					</h2>
 					<div id="panelsStayOpen-collapseEleven" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingEleven">
 					  <div class="accordion-body">
-						Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Method of travel to work or study, Distance to place of work or study</span>
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Method of travel to work or study, Distance to place of work or study</span>
 	  
 
 						<div class="grid mt" bind:clientWidth={w}>
@@ -2367,9 +2392,9 @@
 									aria-expanded="false"
 									aria-controls="method-travel-work-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Method of travel to work<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2383,17 +2408,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["method_of_travel_to_work"])}
+								<StackedBarChart data={place && makeData(["method_of_travel_to_work"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2408,9 +2433,9 @@
 									aria-expanded="false"
 									aria-controls="method-travel-study-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Method of travel to study<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2424,17 +2449,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["method_of_travel_to_study"])}
+								<StackedBarChart data={place && makeData(["method_of_travel_to_study"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2455,9 +2480,9 @@
 									aria-expanded="false"
 									aria-controls="distance-travel-work-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Distance to place of work<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2470,17 +2495,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["distance_travelled_to_work"])}
+								<StackedBarChart data={place && makeData(["distance_travelled_to_work"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2495,9 +2520,9 @@
 									aria-expanded="false"
 									aria-controls="distance-travel-study-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Distance to place of study<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2510,17 +2535,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["distance_travelled_to_study"])}
+								<StackedBarChart data={place && makeData(["distance_travelled_to_study"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2539,7 +2564,7 @@
 					</h2>
 					<div id="panelsStayOpen-collapseTwelve" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwelve">
 					  <div class="accordion-body">
-						Census 2021 - {data.place.name} - <span class="accordion-button-title-sub">Address one year ago, Year of arrival to live in NI</span>
+						Census 2021 - {place.name} - <span class="accordion-button-title-sub">Address one year ago, Year of arrival to live in NI</span>
 	  
 
 						<div class="grid mt" bind:clientWidth={w}>
@@ -2553,9 +2578,9 @@
 									aria-expanded="false"
 									aria-controls="address-1yr-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Address one year ago<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2568,16 +2593,16 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["address_one_year_ago"])}
+								<StackedBarChart data={place && makeData(["address_one_year_ago"])}
 									zKey={chart_compare_type}
 									label={chartLabel}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2592,9 +2617,9 @@
 									aria-expanded="false"
 									aria-controls="year-arr-info"
 								>
-									<div class="blocktitle" style="margin: 0; width: 100%" on:click={changeAria}>
+									<div class="blocktitle" style="margin: 0; width: 100%">
 										Year of arrival to live in NI<span
-											style="color: #6E6E6E; font-size: 14pt;"
+											style="color: gray; font-size: 14pt;"
 											>{@html " &#x24D8; "}</span
 										>
 									</div>
@@ -2607,17 +2632,17 @@
 										>
 									</div>
 								</div>
-								<StackedBarChart data={data.place && makeData(["year_of_arrival"])}
+								<StackedBarChart data={place && makeData(["year_of_arrival"])}
 									zKey={chart_compare_type}
 									label={chartLabel}
 									topic_prev_available = {false}/>
 	<!-- 							<br>
-								{#if comp_none || (comp_ni && data.place.type == "ni")}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{#if comp_none || (comp_ni && place.type == "ni")}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_nocompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{:else if comp_2011}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
-								{:else if comp_ni && data.place.type != "ni"}
-									<GroupChart data={makeDataGroupSort(data.place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+									<GroupChart data={makeDataGroupSort(place.grouped_data_timecompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
+								{:else if comp_ni && place.type != "ni"}
+									<GroupChart data={makeDataGroupSort(place.grouped_data_areacompare.accommodation_type,"accommodation_type")} zKey="group"	label={chartLabel}/>
 								{/if} -->
 										
 							</div>
@@ -2682,14 +2707,14 @@
 		color: darkgreen;
 	}
 	.increase::before {
-		content: "▲" / "Increase of";
+		content: "▲";
 		color: darkgreen;
 	}
 	.decrease {
 		color: darkred;
 	}
 	.decrease::before {
-		content: "▼" / "Decrease of";
+		content: "▼";
 		color: darkred;
 	}
 	.nochange {
@@ -2841,6 +2866,7 @@
 		.highlited {
 			color: red !important;
 			-webkit-print-color-adjust: exact;
+			print-color-adjust: exact;
 		}
 	}
 

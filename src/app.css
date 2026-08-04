@@ -121,7 +121,7 @@ img {
 blockquote {
 	margin: 30px 0 6px 0;
 	font-size: 30px;
-	color: #707070;
+	color: #777;
 }
 
 small {
@@ -172,7 +172,7 @@ small {
 	margin-top: 8px;
 	text-align: left;
 	font-size: 0.85em;
-	color: #707070;
+	color: #777;
 }
 
 .inset-medium {
@@ -209,7 +209,7 @@ small {
 }
 
 .muted {
-	color: #707070;
+	color: #777;
 }
 
 
@@ -230,7 +230,7 @@ small {
 }
 
 .em-muted {
-	background-color: #707070;
+	background-color: #777;
 	color: #fff;
 }
 
@@ -384,5 +384,40 @@ small {
 }
 
 .accordion-button-title-sub {
-	color: #707070;
+	color: #777777;
+}
+
+/* COOKIE BANNER */
+.cookies-infobar {
+  background-color: #00205b;   /* NISRA navy, same as footer */
+  color: #fff;
+  padding: 16px 0;
+}
+.cookies-infobar .container {
+  width: 90%;
+  margin: 0 auto;              /* centre, matching the old banner */
+}
+.cookies-infobar p {
+  margin: 8px 0;
+  font-size: 18px;
+}
+.cookies-infobar .cookiesbarlink {
+  color: #fff;                 /* link must be legible on navy */
+}
+.cookies-infobar_btn,
+.cookies-infobar_btn_reject {
+  font: inherit;               /* default buttons ignore page font */
+  font-weight: 700;
+  color: #fff;
+  border: 0;
+  padding: 8px 16px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+.cookies-infobar_btn        { background-color: #0f8243; }  /* accept */
+.cookies-infobar_btn_reject { background-color: #6d6e72; }  /* reject */
+.cookies-infobar_btn:focus,
+.cookies-infobar_btn_reject:focus {
+  box-shadow: 0 0 0 3px #f93;  /* visible keyboard focus - required */
+  outline: 0;
 }

@@ -99,42 +99,147 @@
 	}
 </script>
 
-<svelte:window on:click={onClick}/>
+<svelte:window onclick={onClick} />
 
-<div id="select" class:active={expanded} on:keydown={doKeydown}>
+<div
+	id="select"
+	role="combobox"
+	aria-expanded={expanded}
+	aria-haspopup="listbox"
+	aria-controls="dropdown"
+	tabindex="0"
+	class:active={expanded}
+	onkeydown={doKeydown}
+>
 	{#if selectedItem && !search}
-	<a id="toggle" class="selected" on:click={toggle}>
-		<span class="selection">{selectedItem[label]} {#if group}<small>{selectedItem[group]}</small>{/if}</span>
-		<span class="button close" on:click={unSelect}>&nbsp;</span>
-	</a>
+		<a
+			id="toggle"
+			class="selected"
+			role="button"
+			tabindex="0"
+			onclick={toggle}
+			onkeydown={(event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					toggle();
+				}
+			}}
+		>
+			<span class="selection">
+				{selectedItem[label]}
+				{#if group}
+					<small>{selectedItem[group]}</small>
+				{/if}
+			</span>
+
+			<span
+				class="button close"
+				role="button"
+				tabindex="0"
+				aria-label="Clear selection"
+				onclick={unSelect}
+				onkeydown={(event) => {
+					if (event.key === "Enter" || event.key === " ") {
+						event.preventDefault();
+						unSelect();
+					}
+				}}
+			>
+				&nbsp;
+			</span>
+		</a>
 	{:else}
-	<a id="toggle" on:click={toggle} on:focus={toggle}>
-		<input on:keydown={typing} type="text" placeholder={placeholder} bind:value={filter} autocomplete="false" bind:this={input} on:keyup={doKeyup} autofocus="autofocus" onfocus="this.select()" />
-		<span class="button" class:search class:down={!search}>&nbsp;</span>
-	</a>
+		<a
+			id="toggle"
+			role="button"
+			tabindex="0"
+			aria-label="Open area selector"
+			onclick={toggle}
+			onfocus={toggle}
+			onkeydown={(event) => {
+				if (event.key === "Enter" || event.key === " ") {
+					event.preventDefault();
+					toggle();
+				}
+			}}
+		>
+			<input
+				onkeydown={typing}
+				type="text"
+				placeholder={placeholder}
+				bind:value={filter}
+				autocomplete="off"
+				bind:this={input}
+				onkeyup={doKeyup}
+				onfocus={(event) => event.currentTarget.select()}
+			/>
+
+			<span
+				class="button"
+				class:search
+				class:down={!search}
+			>
+				&nbsp;
+			</span>
+		</a>
 	{/if}
+
 	{#if expanded}
-	<div id="dropdown" bind:this={el} style="top: 0; margin-top: 50px">
-		<ul>
-			{#if filter.length < 3}
-			<li>Type a name...</li>
-			{:else if filtered[0] && group}
-			{#each filtered as option, i}
-			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
-				{option[label]} <small>{option[group]}</small>
-			</li>
-			{/each}
-			{:else if filtered[0]}
-			{#each filtered as option, i}
-			<li class:highlight="{active == i}" on:click="{() => select(option)}" on:mouseover="{() => active = i}" bind:this="{items[i]}">
-				{option[label]}
-			</li>
-			{/each}
-			{:else}
-			<li>No results</li>
-			{/if}
-		</ul>
-	</div>
+		<div
+			id="dropdown"
+			bind:this={el}
+			style="top: 0; margin-top: 50px"
+		>
+			<ul role="listbox">
+				{#if filter.length < 3}
+					<li>Type a name...</li>
+				{:else if filtered[0] && group}
+					{#each filtered as option, i}
+						<li
+							role="option"
+							tabindex="0"
+							aria-selected={active == i}
+							class:highlight={active == i}
+							onclick={() => select(option)}
+							onkeydown={(event) => {
+								if (event.key === "Enter" || event.key === " ") {
+									event.preventDefault();
+									select(option);
+								}
+							}}
+							onmouseover={() => active = i}
+							onfocus={() => active = i}
+							bind:this={items[i]}
+						>
+							{option[label]} <small>{option[group]}</small>
+						</li>
+					{/each}
+				{:else if filtered[0]}
+					{#each filtered as option, i}
+						<li
+							role="option"
+							tabindex="0"
+							aria-selected={active == i}
+							class:highlight={active == i}
+							onclick={() => select(option)}
+							onkeydown={(event) => {
+								if (event.key === "Enter" || event.key === " ") {
+									event.preventDefault();
+									select(option);
+								}
+							}}
+							onmouseover={() => active = i}
+							onfocus={() => active = i}
+							bind:this={items[i]}
+						>
+							{option[label]}
+						</li>
+					{/each}
+				{:else}
+					<li>No results</li>
+				{/if}
+			</ul>
+		</div>
 	{/if}
 </div>
 
@@ -196,6 +301,7 @@
 		border-radius: 0px;
 		-webkit-appearance: none;
 		-moz-appearance: none;
+		appearance: none;
 	}
 	#select input:focus {
 		outline: none;
@@ -234,7 +340,6 @@
 		background-color: #00205b;
 		background-repeat: no-repeat;
 		background-position: center;
-		display: inline-block;
 		float: right;
 	}
 	.down {
